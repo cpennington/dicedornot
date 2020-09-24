@@ -18,6 +18,13 @@ export const replay = {
       var replayStep = data.replay.replaystep[stepIndex];
       // extractPlayerDetails(replayStep, playerDetails);
       // extractActionsFromStep(replayStep, rolls);
+      // As far as I understand subreslttype = 57 its second not-used frenzy block
+      // It would lead to blockRoll without dices and as a result to some weird shit.
+      // So we ignore it here.
+      while ((_.has(replayStep, ["ruleseventboardaction", "results", "boardactionresult", "subresulttype"])) && (replayStep.ruleseventboardaction.results.boardactionresult.subresulttype === 57)) {
+        ++stepIndex;
+        replayStep = data.replay.replaystep[stepIndex];
+      }
       rolls = rolls.concat(Roll.fromReplayStep(stepIndex, replayStep));
     }
     console.log("Extracted rolls...", rolls);
