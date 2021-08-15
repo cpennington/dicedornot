@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "snowpack build",
-    "dev": "snowpack dev",
+    "start": "snowpack dev",
     "check-types": "svelte-check && tsc --noEmit",
     "validateReplay": "npm run buildJsonSchema && npm run buildJSModules && ts-node ./bin/validateReplay.mjs",
     "buildJsonSchema": "typescript-json-schema --required --noExtraProps --strictNullChecks tsconfig.json ReplayStep > bin/replayStep.json",

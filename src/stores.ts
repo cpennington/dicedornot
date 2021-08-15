@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import type { ReplayPreview } from './replay-utils';
 import type {ProcessedReplay} from './replay.js';
+import type {PlayerStates, PlayerDefinitions, PlayerProperties} from './viewer/types.js';
 
 let startingUrl = new URL(window.location.href);
 let target: number | undefined;
@@ -20,3 +21,6 @@ export const replayTarget = writable<number | undefined>(target);
 export const replayPreview = writable<ReplayPreview | undefined>(undefined);
 export const error = writable<Error | string | undefined>(undefined);
 export const showResultsAnalysis = writable<boolean>(false);
+export const playerStates = writable<PlayerStates>(new Map());
+export const playerDefs = writable<PlayerDefinitions>(new Map());
+export const playerProperties = writable<PlayerProperties>(new Map());

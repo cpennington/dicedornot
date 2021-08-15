@@ -1,5 +1,5 @@
 
-import { ACTION_TYPE, RESULT_TYPE, ROLL, SUB_RESULT_TYPE, SIDE, ROLL_STATUS, RESULT_REQUEST_TYPE, ACTION_REQUEST_TYPE, RACE_ID, SITUATION, WAITING_REQUEST_TYPE, SKILL, WEATHER } from "../constants.js";
+import { ACTION_TYPE, RESULT_TYPE, ROLL, SUB_RESULT_TYPE, SIDE, ROLL_STATUS, RESULT_REQUEST_TYPE, ACTION_REQUEST_TYPE, RACE_ID, SITUATION, WAITING_REQUEST_TYPE, SKILL, WEATHER, PLAYER_TYPE } from "../constants.js";
 
 export enum Bool {
     false = 0,
@@ -269,7 +269,7 @@ export interface RulesEventRemoveInducement {
 
 export interface RulesEventAddMercenary {
     MercenaryId: PlayerId,
-    MercenaryType: number,
+    MercenaryType: PLAYER_TYPE,
     InducementCategory: number,
     InducementsCash?: number,
     Treasury?: number,
@@ -442,7 +442,7 @@ interface PlayerAction extends BaseAction {
 //     return (result as DiceRollResult<R>).RollStatus !== undefined;
 // }
 
-interface BaseResult {
+export interface BaseResult {
     ResultType?: RESULT_TYPE,
     SubResultType?: SUB_RESULT_TYPE,
     IsOrderCompleted?: Bool,
@@ -485,7 +485,7 @@ interface NoChoicesResult extends BaseResult {
 export interface DiceModifier {
     Cell?: Cell,
     Skill?: -1 | SKILL,
-    Type?: number,
+    Type?: MODIFIER_TYPE,
     Value?: number
 }
 export interface RollResult<R> extends BaseResult {
@@ -682,9 +682,9 @@ export interface FoulAction extends OrderAction, PlayerAction, ResultsAction<NoC
 type TakeDamageResults = ArmorResult | InjuryResult | CasualtyResult | RegenerationResult | POArmorResult | POInjuryResult | ChainsawArmorResult | RaiseDeadResult;
 export interface TakeDamageAction extends PlayerAction, OrderT<Cell, { Cell: "" | MList<Cell> }>, ResultsAction<TakeDamageResults> { ActionType: ACTION_TYPE.TakeDamage }
 // Kickoff = 7, //Pick Kickoff Location
-export interface KickoffAction extends PlayerAction, OrderAction, ResultsAction<NoChoicesResult> { ActionType: ACTION_TYPE.Kickoff }
+export interface KickoffAction extends PlayerAction, OrderAction, ResultsAction<NoChoicesResult> { ActionType: ACTION_TYPE.KickoffTarget }
 // Scatter = 8, //Pick Kickoff Scatter KickSkill
-export interface ScatterAction extends PlayerAction, OrderT<Cell, {Cell: Cell}>, ResultsAction<KickoffScatterResult | ThrowInResult | TouchBackResult | KickoffGustResult > { ActionType: ACTION_TYPE.Scatter };
+export interface ScatterAction extends PlayerAction, OrderT<Cell, {Cell: Cell}>, ResultsAction<KickoffScatterResult | ThrowInResult | TouchBackResult | KickoffGustResult > { ActionType: ACTION_TYPE.KickoffScatter };
 // Catch = 9, //Catch
 export interface CatchAction extends PlayerAction, OrderAction, ResultsAction<CatchResult | LonerResult> { ActionType: ACTION_TYPE.Catch }
 // TouchDown = 10, //Touchdown?

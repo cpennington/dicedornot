@@ -4,25 +4,23 @@
   import FixedRatio from "./FixedRatio.svelte";
   import Overlay from "./Overlay.svelte";
   import { replayPreview } from "../stores.js";
-  import type { CrossFadeFn, PlayerProps, Team, PitchCellProps } from "./types.js";
-  export let pitchPlayers: Record<string, PlayerProps>,
-    homeTeam: Team,
-    awayTeam: Team,
-    pitch: Record<string, PitchCellProps>,
+  import type { CrossFadeFn, Team, Pitch } from "./types.js";
+  import type * as Internal from "../replay/Internal.js";
+  export let teams: Internal.ByTeam<Team>,
+    pitch: Pitch,
     send: CrossFadeFn,
     receive: CrossFadeFn;
 
   let homeLogo: string, awayLogo: string;
   $: {
-    homeLogo = homeTeam.logo;
-    awayLogo = awayTeam.logo;
+    homeLogo = teams.home.logo;
+    awayLogo = teams.away.logo;
   }
 </script>
 
 <div class="pitch">
   <Grid width={26} height={15} let:row let:column>
     <PitchSquare
-      {pitchPlayers}
       {homeLogo}
       {awayLogo}
       {pitch}

@@ -330,8 +330,8 @@ export enum ACTION_TYPE {
   Handoff = 4, //Ball handoff
   Foul = 5, //Foul
   TakeDamage = 6, //Armor
-  Kickoff = 7, //Pick Kickoff Location
-  Scatter = 8, //Pick Kickoff Scatter KickSkill
+  KickoffTarget = 7, //Pick Kickoff Location
+  KickoffScatter = 8, //Pick Kickoff Scatter KickSkill
   Catch = 9, //Catch
   TouchDown = 10, //Touchdown?
   StunWake = 11, //End Turn Stun release?
@@ -880,8 +880,7 @@ function badPlayerType(playerType: PLAYER_TYPE) {
   console.error(`Unexpected player type ${playerType}`);
 }
 
-export function getPlayerSprite(playerId: PlayerId, playerTypeId: PlayerTypeId): PlayerSprite {
-  let playerType = getPlayerType(playerTypeId);
+export function getPlayerSprite(playerId: PlayerId, playerType: PLAYER_TYPE): PlayerSprite {
   switch (playerType) {
     case PLAYER_TYPE.AmazonBlitzer: return { race: 'amazon', model: `blitzer${playerId % 2 + 1}` };
     case PLAYER_TYPE.AmazonCatcher: return { race: 'amazon', model: `catcher${playerId % 2 + 1}` };
@@ -1049,7 +1048,7 @@ export function getPlayerSprite(playerId: PlayerId, playerTypeId: PlayerTypeId):
     case PLAYER_TYPE.StarWillowRosebark: return { model: 'willow-rosebark', race: 'starplayer' };
     case PLAYER_TYPE.StarZaraTheSlayer: return { model: 'zara-the-slayer', race: 'starplayer' };
     case PLAYER_TYPE.StarZzhargMadeye: return { model: 'zzharg-madeye', race: 'starplayer' };
-    case PLAYER_TYPE.Unknown: return {model: 'lineman', race: 'human'};
+    case PLAYER_TYPE.Unknown: return { model: 'lineman', race: 'human' };
     default:
       badPlayerType(playerType);
   }
@@ -1104,7 +1103,7 @@ export const PLAYER_TVS: Record<PLAYER_TYPE, PlayerTV> = {
   [PLAYER_TYPE.HighelfBlitzer]: { star: false, tv: 100, normals: 'GA', doubles: 'PS', free: [SKILL.Block] },
   [PLAYER_TYPE.HumanLineman]: { star: false, tv: 50, normals: 'G', doubles: 'APS', free: [] },
   [PLAYER_TYPE.HumanCatcher]: { star: false, tv: 70, normals: 'GA', doubles: 'PS', free: [SKILL.Dodge, SKILL.Catch] },
-  [PLAYER_TYPE.HumanThrower]: { star: false, tv: 70, normals: 'GP', doubles: 'AS', free: [SKILL.Pass, SKILL.SureHands]},
+  [PLAYER_TYPE.HumanThrower]: { star: false, tv: 70, normals: 'GP', doubles: 'AS', free: [SKILL.Pass, SKILL.SureHands] },
   [PLAYER_TYPE.HumanBlitzer]: { star: false, tv: 90, normals: 'GS', doubles: 'AP', free: [SKILL.Block] },
   [PLAYER_TYPE.HumanOgre]: { star: false, tv: 130, normals: 'S', doubles: 'GAP', free: [SKILL.BoneHead, SKILL.MightyBlow, SKILL.ThickSkull, SKILL.ThrowTeamMate, SKILL.Loner] },
   [PLAYER_TYPE.KhemriLineman]: { star: false, tv: 40, normals: 'G', doubles: 'APS', free: [SKILL.Regeneration, SKILL.ThickSkull] },
@@ -1121,8 +1120,8 @@ export const PLAYER_TVS: Record<PLAYER_TYPE, PlayerTV> = {
   [PLAYER_TYPE.NecromanticWerewolf]: { star: false, tv: 120, normals: 'GA', doubles: 'PS', free: [SKILL.Regeneration, SKILL.Claw, SKILL.Frenzy] },
   [PLAYER_TYPE.NorseLineman]: { star: false, tv: 50, normals: 'G', doubles: 'APS', free: [SKILL.Block] },
   [PLAYER_TYPE.NorseThrower]: { star: false, tv: 70, normals: 'GP', doubles: 'AS', free: [SKILL.Block, SKILL.Pass] },
-  [PLAYER_TYPE.NorseRunner]: { star: false, tv: 90, normals: 'GA', doubles: 'PS', free: [SKILL.Block, SKILL.Dauntless]},
-  [PLAYER_TYPE.NorseBerserker]: { star: false, tv: 90, normals: 'GS', doubles: 'AP', free: [SKILL.Block, SKILL.Frenzy,SKILL.JumpUp] },
+  [PLAYER_TYPE.NorseRunner]: { star: false, tv: 90, normals: 'GA', doubles: 'PS', free: [SKILL.Block, SKILL.Dauntless] },
+  [PLAYER_TYPE.NorseBerserker]: { star: false, tv: 90, normals: 'GS', doubles: 'AP', free: [SKILL.Block, SKILL.Frenzy, SKILL.JumpUp] },
   [PLAYER_TYPE.NorseUlfwerener]: { star: false, tv: 110, normals: 'GS', doubles: 'AP', free: [SKILL.Frenzy] },
   [PLAYER_TYPE.NorseYhetee]: { star: false, tv: 140, normals: 'S', doubles: 'GAP', free: [SKILL.Loner, SKILL.Claw, SKILL.DisturbingPresence, SKILL.Frenzy, SKILL.WildAnimal] },
   [PLAYER_TYPE.NurgleRotter]: { star: false, tv: 40, normals: 'GM', doubles: 'APS', free: [SKILL.Decay, SKILL.NurglesRot] },
@@ -1227,13 +1226,13 @@ export const PLAYER_TVS: Record<PLAYER_TYPE, PlayerTV> = {
   [PLAYER_TYPE.StarWillowRosebark]: { tv: 150, star: true },
   [PLAYER_TYPE.StarZaraTheSlayer]: { tv: 270, star: true },
   [PLAYER_TYPE.StarZzhargMadeye]: { tv: 90, star: true },
-  [PLAYER_TYPE.Unknown]: {tv: 0, star: true},
+  [PLAYER_TYPE.Unknown]: { tv: 0, star: true },
 };
 
 export interface Casualty {
   dice: number,
   icon: string,
-  result: string, 
+  result: string,
   effect: string
 }
 
@@ -1383,4 +1382,33 @@ export const STAR_NAMES: Record<string, string> = {
 export enum SIDE {
   home = 0,
   away = 1,
+}
+
+export enum INDUCEMENT_CATEGORY {
+
+}
+
+export function weatherTable(roll: number) {
+  switch (roll) {
+    case 2: return WEATHER.SwelteringHeat
+    case 3: return WEATHER.VerySunny
+    case 11: return WEATHER.PouringRain
+    case 12: return WEATHER.Blizzard
+    default:
+      return WEATHER.Nice
+  }
+}
+
+export enum STATUS {
+  standing = 0,
+  prone = 1,
+  stunned = 2,
+}
+
+export enum MODIFIER_TYPE {
+  unknownModifier2 = 2, // On Dodge
+  unknownModifier5 = 5, // On Pickup
+  teamAssist = 11,
+  opponentAssist = 12,
+  unknownModifier13 = 13, // ON block
 }

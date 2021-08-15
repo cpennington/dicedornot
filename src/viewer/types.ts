@@ -8,6 +8,7 @@ import type {
 import type { ProcessedReplay } from '../replay.js';
 import type {
     SIDE,
+    SITUATION,
 } from "../constants.js";
 import type {crossfade} from 'svelte/transition';
 import type {Color} from 'chroma-js';
@@ -15,9 +16,9 @@ import type {Color} from 'chroma-js';
 export type CrossFadeFn = ReturnType<typeof crossfade>[number];
 
 export interface Dugout {
-    cas: BB2.PlayerId[],
-    ko: BB2.PlayerId[],
-    reserve: BB2.PlayerId[],
+    cas: Internal.PlayerNumber[],
+    ko: Internal.PlayerNumber[],
+    reserve: Internal.PlayerNumber[],
 }
 
 export interface Team {
@@ -72,12 +73,15 @@ export interface PitchCellProps {
     blood?: BloodProps;
 }
 
+export type Pitch = Map<string, PitchCellProps>;
+export type PlayerStates = Map<Internal.PlayerNumber, Internal.PlayerState>;
+export type PlayerDefinitions = Map<Internal.PlayerNumber, Internal.Player>;
+export type PlayerProperties = Map<Internal.PlayerNumber, PlayerProps>;
+
 export interface PlayerProps {
-    data: BB2.PitchPlayer;
     blitz?: boolean;
     moving?: boolean;
     prone?: boolean;
-    team: SIDE;
     stunned?: boolean;
     stupidity?: string;
 }
@@ -90,10 +94,10 @@ export interface WakeConditions {
 }
 
 export interface Preview {
-    homeTeam: Team,
-    awayTeam: Team,
-    pitch: Record<string, PitchCellProps>,
-    players: Record<string, PlayerProps>,
+    teams: Internal.ByTeam<Team>,
+    pitch: Map<string, PitchCellProps>,
+    playerStates: PlayerStates,
+    playerProperties: PlayerProperties,
     playing: boolean,
     current: number,
 }

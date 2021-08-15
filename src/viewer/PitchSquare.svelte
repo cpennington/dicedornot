@@ -6,11 +6,11 @@
   import Foul from "./Foul.svelte";
   import Player from "./Player.svelte";
   import TeamLogo from "./TeamLogo.svelte";
-  import type { CrossFadeFn, PitchCellProps, PlayerProps } from "./types.js";
-  export let pitchPlayers: Record<string, PlayerProps>,
+  import type { CrossFadeFn, PitchCellProps, Pitch } from "./types.js";
+  export let
     row: number,
     column: number,
-    pitch: Record<string, PitchCellProps>,
+    pitch: Pitch,
     homeLogo: string,
     awayLogo: string,
     send: CrossFadeFn,
@@ -23,7 +23,7 @@
     id: string;
 
   $: {
-    ({ player, cell, ball, dice, foul } = pitch[`${column}-${row}`] || {});
+    ({ player, cell, ball, dice, foul } = pitch.get(`${column}-${row}`) || {});
     id = `pitch-${row}-${column}`;
   }
 </script>
@@ -51,7 +51,7 @@
     <Cell {...cell} {send} {receive} {row} {column} />
   {/if}
   {#if player}
-    <Player {...pitchPlayers[player]} {send} {receive} />
+    <Player {player} {send} {receive} />
   {/if}
   {#if dice}
     <DiceResult {dice} />

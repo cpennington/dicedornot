@@ -45,8 +45,15 @@
       del(key);
       return undefined;
     } else {
-      console.log("Loaded replay from cache", {cachedReplay});
-      return convertReplay(cachedReplay.Replay);
+      console.log("Loaded replay from cache...", {cachedReplay});
+      try {
+        const converted = convertReplay(cachedReplay.Replay);
+        console.log("Converted replay to internal format", {converted});
+        return converted;
+      } catch (err){
+        console.error({msg: 'Unable to convert to internal format', err});
+        return undefined;
+      }
     }
   }
 

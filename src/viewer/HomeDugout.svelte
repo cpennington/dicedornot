@@ -3,11 +3,10 @@
   import TeamAids from "./TeamAids.svelte";
   import Weather from "./Weather.svelte";
   import TeamLogo from "./TeamLogo.svelte";
-  import type { CrossFadeFn, Team, PlayerProps } from "./types";
+  import type { CrossFadeFn, Team } from "./types";
   import type { WEATHER } from "../constants";
-  import type * as Internal from "../replay/Internal.js";
 
-  export let pitchPlayers: Record<Internal.PlayerNumber, PlayerProps>,
+  export let
     team: Team,
     weather: WEATHER,
     send: CrossFadeFn,
@@ -16,7 +15,7 @@
 
 <div class="dugout">
   {#if team}
-    <HomeBench {pitchPlayers} dugout={team.dugout} {send} {receive} />
+    <HomeBench dugout={team.dugout} {send} {receive} />
     <div class="logo">
       <TeamLogo logo={team.logo} />
     </div>

@@ -1,14 +1,16 @@
-import { RACE_ID, SIDE } from '../constants.js';
+import { RACE_ID, SIDE, ACTION_TYPE, weatherTable, WEATHER, ROLL, getPlayerType, STATUS, SITUATION } from '../constants.js';
 import * as B from './BB2.js';
 import type * as I from './Internal.js';
 import { cellEq } from './Internal.js';
 import he from 'he';
-import { ensureList } from '../replay-utils.js';
-import { first } from 'underscore';
+import { ensureKeyedList, ensureList, translateStringNumberList } from '../replay-utils.js';
+import { all, first } from 'underscore';
+import { distance } from 'chroma-js';
+import type { replay } from '../stores.js';
 
-function requireValue<T>(v: T | undefined, msg: string): T {
+function requireValue<T>(v: T | undefined, msg: string, obj: any): T {
     if (v === undefined) {
-        throw new Error(msg);
+        throw { msg, obj };
     }
     return v;
 }
@@ -23,6 +25,10 @@ class Replay {
         public finalScore: I.ByTeam<number> = { home: 0, away: 0 },
         public metadata: Partial<I.Replay['metadata']> = {},
         public gameLength: number = 0,
+        public fans: I.ByTeam<I.Roll | undefined> = { home: undefined, away: undefined },
+        public initialWeather: WEATHER | undefined = undefined,
+        public coinFlipWinner: I.Side = "home",
+        public initialKickingTeam: I.Side = "home",
     ) {
         this.unhandledSteps = [...this.unhandledSteps];
         this.gameLength = Math.max(16, ...this.unhandledSteps.flatMap(step => {
@@ -46,15 +52,20 @@ class Replay {
             },
             stadium: {
                 ...this.stadium,
-                name: requireValue(this.stadium.name, `Missing stadium.name in ${JSON.stringify(this)}`),
-                type: requireValue(this.stadium.type, `Missing stadium.type in ${JSON.stringify(this)}`),
+                name: requireValue(this.stadium.name, 'Missing stadium.name', this),
+                type: requireValue(this.stadium.type, 'Missing stadium.type', this),
             },
             drives: this.drives.map(drive => drive.finalize()),
             finalScore: this.finalScore,
             metadata: {
                 ...this.metadata,
-                datePlayed: requireValue(this.metadata.datePlayed, `Missing metadata.datePlayed in ${JSON.stringify(this)}`),
-            }
+                datePlayed: requireValue(this.metadata.datePlayed, 'Missing metadata.datePlayed', this),
+            },
+            fans: {
+                home: requireValue(this.fans.home, 'Missing fans.home', this),
+                away: requireValue(this.fans.away, 'Missing fans.away', this),
+            },
+            initialWeather: requireValue(this.initialWeather, 'Missing initialWeather', this),
         };
     }
 
@@ -76,7 +87,7 @@ class Replay {
             } else if ('RulesEventSetUpAction' in step) {
                 this.handleSetUpAction(step);
             } else if ('RulesEventSetUpConfiguration' in step) {
-                this.cantHandle(step);
+                this.cantHandle(step, "Can't handle RulesEventSetUpConfiguration");
             } else if ('RulesEventSetGeneratedPersonnalities' in step) {
                 // don't need to handle this
             } else if (
@@ -104,13 +115,25 @@ class Replay {
 
     handleAddInducementStep(step: B.AddInducementStep) {
         if ('RulesEventAddMercenary' in step) {
-            this.cantHandle(step);
+            // We can pull mercenaries from board state.
+            for (const merc of ensureList(step.RulesEventAddMercenary)) {
+                const playerNumber = merc.MercenaryId;
+                const side = convertSide(B.playerIdSide(playerNumber));
+                const team = this.teams[side];
+                const pitchPlayers = ensureKeyedList('PlayerState', step.BoardState.ListTeams.TeamState[side == 'home' ? 0 : 1].ListPitchPlayers);
+                const pitchPlayer = pitchPlayers.find(p => p.Id = merc.MercenaryId);
+                assert(pitchPlayer != undefined);
+                const player: I.Player = convertPlayerDefinition(pitchPlayer);
+                console.log("Adding mercenary", {team, player, pitchPlayer, step, replay: this});
+                team.players.set(player.id.number, player)
+                team.inducements.mercenaries.set(player.id.number, player);
+            }
         }
         if ('RulesEventAddInducement' in step) {
-            this.cantHandle(step);
+            // We can pull inducements applied from the board state.
         }
         if ('RulesEventRemoveInducement' in step) {
-            this.cantHandle(step);
+            // We can pull inducements applied from the board
         }
         if ('RulesEventInducementInfos' in step) {
             // Don't bother listing what the available inducements were
@@ -125,11 +148,16 @@ class Replay {
 
     handleAddInducementSkillStep(step: B.AddInducementSkillStep) {
         let player = step.RulesEventAddInducementSkill.MercenaryId;
-        let side = B.playerIdSide(player);
+        let side = convertSide(B.playerIdSide(player));
         let skill = step.RulesEventAddInducementSkill.SkillId;
-        let team = this.teams[side == SIDE.home ? 'home' : 'away'];
-        team.inducements.mercenaries[player].skills.push(skill);
-        team.players[player].skills.push(skill);
+        let team = this.teams[side];
+        let merc = team.inducements.mercenaries.get(player);
+        if (merc) {
+            merc.skills.push(skill);
+        } else {
+            console.warn("Unable to find merc to add skills to", {step, replay: this, team});
+        }
+        team.players.get(player)!.skills.push(skill);
     }
 
     handleGameInfo(step: B.GameInfoStep) {
@@ -137,12 +165,18 @@ class Replay {
         this.stadium.type = step.GameInfos.Stadium;
         this.stadium.enhancement = step.GameInfos.StructStadium;
 
-        this.teams.home.coach = he.decode(ensureList(step.GameInfos.CoachesInfos.CoachInfos)[SIDE.home].UserId.toString());
-        this.teams.away.coach = he.decode(ensureList(step.GameInfos.CoachesInfos.CoachInfos)[SIDE.away].UserId.toString());
-        this.teams.home.race = step.BoardState.ListTeams.TeamState[SIDE.home].Data.IdRace;
-        this.teams.away.race = step.BoardState.ListTeams.TeamState[SIDE.away].Data.IdRace;
-        this.teams.home.name = he.decode(step.BoardState.ListTeams.TeamState[SIDE.home].Data.Name.toString());
-        this.teams.away.name = he.decode(step.BoardState.ListTeams.TeamState[SIDE.away].Data.Name.toString());
+        for (const side of ['home', 'away'] as I.Side[]) {
+            this.teams[side].coach = he.decode(ensureList(step.GameInfos.CoachesInfos.CoachInfos)[SIDE[side]].UserId.toString());
+
+            let bb2Team = step.BoardState.ListTeams.TeamState[SIDE[side]];
+            this.teams[side].race = bb2Team.Data.IdRace;
+            this.teams[side].name = he.decode(bb2Team.Data.Name.toString());
+            this.teams[side].logo = bb2Team.Data.Logo;
+
+            this.teams[side].players = new Map(
+                ensureKeyedList("PlayerState", bb2Team.ListPitchPlayers).map(p => [p.Id, convertPlayerDefinition(p)])
+            );
+        }
 
         this.metadata.league = step.GameInfos.RowLeague.Name && he.decode(step.GameInfos.RowLeague.Name.toString());
     }
@@ -152,15 +186,15 @@ class Replay {
         const toCell = convertCell(step.RulesEventSetUpAction.NewPosition);
         const alsoMove = step.RulesEventSetUpAction.Substitute;
         const side = convertSide(step.RulesEventWaitingRequest == '' ? SIDE.home : step.RulesEventWaitingRequest.ConcernedTeam || SIDE.home);
-        let currentDrive: Drive = this.drives.pop() || new Drive();
+        let currentDrive = this.lastDrive();
         if (currentDrive.setups == undefined) {
-            currentDrive.setups = {first: side, home: [], away: []};
+            currentDrive.setups = { first: side, home: [], away: [] };
         }
         let currentSetup = currentDrive.setups[side];
         let latestSetup = last(currentSetup);
         let players: Map<I.PlayerNumber, I.Cell>;
         if (latestSetup) {
-            players = new Map(latestSetup.players);
+            players = new Map(latestSetup.checkpoint.playerPositions);
             latestSetup.movedPlayers.forEach((position, id) => players.set(id, position));
         } else {
             players = new Map();
@@ -177,58 +211,270 @@ class Replay {
             movedPlayers.set(alsoMove, fromCell);
         }
         let nextSetup = {
-            players,
+            checkpoint: { playerPositions: players },
             movedPlayers
         }
         currentSetup.push(nextSetup);
-        this.drives.push(currentDrive);
     }
 
     handleGameTurnStep(step: B.GameTurnStep) {
-        this.cantHandle(step);
+        if (
+            step.RulesEventKickOffChoice
+        ) {
+            this.coinFlipWinner = convertSide(step.RulesEventKickOffChoice.ChosingTeam || 0);
+            this.initialKickingTeam = convertSide(step.RulesEventKickOffChoice.KickOffTeam || 0);
+        }
+        if (
+            step.RulesEventForcedDices
+        ) {
+            this.cantHandle(step, "Can't handle RulesEventForcedDices");
+            return;
+        }
+        if (
+            step.RulesEventCoachChoice
+        ) {
+            this.cantHandle(step, "Can't handle RulesEventCoachChoice");
+            return;
+        }
+        if (
+            step.RulesEventSpecialAction
+        ) {
+            this.cantHandle(step, "Can't handle RulesEventSpecialAction");
+            return;
+        }
+        if (
+            step.RulesEventKickOffEventCancelled
+        ) {
+            this.cantHandle(step, "Can't handle RulesEventKickOffEventCancelled");
+            return;
+        }
+        if (
+            step.RulesEventLoadGame
+        ) {
+            this.cantHandle(step, "Can't handle RulesEventLoadGame");
+            return;
+        }
+        if (step.RulesEventWaitingRequest) {
+            // Ignore this
+        }
+        if (step.RulesEventEndTurn) {
+            if (step.RulesEventEndTurn.NewDrive) {
+                this.drives.push(new Drive());
+            }
+        }
+        if (step.RulesEventKickOffTable) {
+            let drive = last(this.drives);
+            if (drive === undefined) {
+                drive = new Drive();
+                this.drives.push(drive);
+            }
+            drive.kickoff.roll = {
+                dice: translateStringNumberList(step.RulesEventKickOffTable.ListDice),
+            }
+        }
+        if (step.RulesEventBoardAction) {
+            let actions = ensureList(step.RulesEventBoardAction);
+            let converters = actions.map(action => actionConverter(this, action));
+            if (converters.some(converter => converter == undefined)) {
+                this.cantHandle(step, "Not all action types can be converted");
+                return
+            }
+            converters.forEach(converter => converter!());
+        }
     }
 
-    cantHandle(step: B.ReplayStep) {
+    cantHandle(step: B.ReplayStep, reason?: string) {
+        console.log("Couldn't handle step", { step, reason });
         this.unhandledSteps.unshift(step);
         this.foundUnhandledStep = true;
+    }
+
+    lastDrive(): Drive {
+        let drive = last(this.drives);
+        if (!drive) {
+            drive = this.addDrive();
+        }
+        return drive;
+    }
+
+    addDrive(): Drive {
+        let lastDrive = last(this.drives);
+        let drive = new Drive();
+        drive.initialScore = lastDrive && lastDrive.finalScore ? lastDrive.finalScore : { home: 0, away: 0 };
+        this.drives.push(drive);
+        return drive;
+    }
+}
+
+function assert(condition: any, msg?: string): asserts condition {
+    if (!condition) {
+        throw new Error(msg);
+    }
+}
+
+function actionConverter(replay: Replay, action: B.RulesEventBoardAction): undefined | (() => void) {
+    if ('ActionType' in action) {
+        switch (action.ActionType) {
+            case ACTION_TYPE.FansNumber:
+                return () => convertFansNumber(replay, action);
+            case ACTION_TYPE.InitialWeather:
+                return () => convertInitialWeather(replay, action);
+            case ACTION_TYPE.KickoffTarget:
+                return () => convertKickoffTarget(replay, action);
+            case ACTION_TYPE.KickoffScatter:
+                return () => convertKickoffScatter(replay, action);
+            case ACTION_TYPE.TakeDamage:
+                return () => convertTakeDamage(replay, action);
+            default:
+                return undefined;
+        }
+    } else {
+        return undefined;
+    }
+}
+
+function convertFansNumber(replay: Replay, action: B.FansAction): void {
+    for (const fanRoll of ensureKeyedList("BoardActionResult", action.Results)) {
+        const team = convertSide(fanRoll.CoachChoices.ConcernedTeam || 0);
+        let dice = translateStringNumberList(fanRoll.CoachChoices.ListDices);
+        replay.fans[team] = {
+            dice,
+            total: dice[0] + dice[1],
+        };
+    }
+};
+
+function convertInitialWeather(replay: Replay, action: B.WeatherAction): void {
+    let result = ensureKeyedList("BoardActionResult", action.Results)[0];
+    let dice = translateStringNumberList(result.CoachChoices.ListDices);
+    replay.initialWeather = weatherTable(dice[0] + dice[1]);
+}
+
+function convertKickoffTarget(replay: Replay, action: B.KickoffAction): void {
+    let drive = replay.lastDrive();
+    drive.kickoff.target = convertCell(action.Order.CellTo.Cell);
+}
+
+function convertKickoffScatter(replay: Replay, action: B.ScatterAction): void {
+    let drive = replay.lastDrive();
+    if (drive.kickoff.scatters == undefined) {
+        drive.kickoff.scatters = [];
+    }
+    for (const result of ensureKeyedList("BoardActionResult", action.Results)) {
+        switch (result.RollType) {
+            case ROLL.KickoffScatter:
+                drive.kickoff.scatters.push(convertCell(action.Order.CellTo.Cell));
+                break;
+            case ROLL.ThrowIn:
+                drive.kickoff.scatters.push(convertCell(action.Order.CellTo.Cell));
+                break;
+            case ROLL.TouchBack:
+                if (result.IsOrderCompleted) {
+                    drive.kickoff.scatters.push(convertCell(action.Order.CellTo.Cell));
+                }
+                break;
+            case ROLL.KickoffGust:
+                drive.kickoff.scatters.push(convertCell(action.Order.CellTo.Cell));
+                break;
+        }
+    }
+}
+
+function convertTakeDamage(replay: Replay, action: B.TakeDamageAction): void {
+    let drive = replay.lastDrive();
+    let damage: Damage = {
+        player: {
+            side: playerNumberToSide(action.PlayerId || 0),
+            number: action.PlayerId || 0,
+        },
+    };
+    for (const result of ensureKeyedList("BoardActionResult", action.Results)) {
+        switch (result.RollType) {
+            case ROLL.Injury:
+                damage.injury = convertDiceRollResult(result);
+                break;
+            case ROLL.Armor:
+                damage.armor = convertDiceRollResult(result);
+                break
+            case ROLL.Casualty:
+                damage.casualty = convertDiceRollResult(result);
+                break
+            case ROLL.Regeneration:
+                damage.regeneration = convertDiceRollResult(result);
+                break
+            case ROLL.PileOnArmorRoll:
+                damage.armor.pileOn = convertDiceRollResult(result);
+                break
+            case ROLL.PileOnInjuryRoll:
+                damage.casualty.pileOn = convertDiceRollResult(result);
+                break
+            case ROLL.ChainsawArmor:
+                damage.armor = convertDiceRollResult(result);
+                break
+            case ROLL.RaiseDead:
+                damage.raiseDead = convertDiceRollResult(result);
+                break
+            default:
+                badResult(result);
+        }
+    }
+
+    if (drive.turns) {
+    } else { // Damage from a rocks during kickoff
+        if (drive.kickoff.rockDamage == undefined) {
+            drive.kickoff.rockDamage = [];
+        }
     }
 }
 
 class Team {
     constructor(
-        public players: Record<I.PlayerNumber, I.Player> = {},
-        public inducements: I.Inducements = { mercenaries: [] },
+        public players: Map<I.PlayerNumber, I.Player> = new Map(),
+        public inducements: I.Inducements = { mercenaries: new Map() },
         public race?: RACE_ID,
         public coach?: string,
         public name?: string,
+        public logo?: string,
     ) { }
 
     finalize(): I.Team {
         return {
             ...this,
-            race: requireValue(this.race, `Missing race in ${JSON.stringify(this)}`),
-            coach: requireValue(this.coach, `Missing coach in ${JSON.stringify(this)}`),
-            name: requireValue(this.name, `Missing name in ${JSON.stringify(this)}`),
+            race: requireValue(this.race, 'Missing race', this),
+            coach: requireValue(this.coach, 'Missing coach', this),
+            name: requireValue(this.name, 'Missing name', this),
+            logo: requireValue(this.logo, 'Missing logo', this),
         };
     }
 }
 
-class Drive implements I.Checkpoint {
+class Drive {
     constructor(
-        public wakeups: I.KickoffOrder<I.WakeupRoll[]> | undefined = undefined,
-        public setups: I.KickoffOrder<I.SetupAction[]> | undefined = undefined,
-        public kickoff?: I.KickoffRoll,
+        public wakeups?: I.KickoffOrder<I.WakeupRoll[]>,
+        public setups?: I.KickoffOrder<I.SetupAction[]>,
+        public kickoff: {
+            roll?: I.KickoffRoll,
+            target?: I.Cell,
+            scatters?: I.Cell[],
+            rockDamage?: I.TakeDamageRoll[],
+        } = {},
         public turns: I.Turn[] = [],
-        public _checkpointData?: any,
+        public initialScore: I.ByTeam<number> = { home: 0, away: 0 },
+        public finalScore?: I.ByTeam<number>,
     ) {
     }
 
     finalize(): I.Drive {
         return {
             ...this,
-            setups: requireValue(this.setups, `Missing setups in ${JSON.stringify(this)}`),
-            wakeups: this.wakeups || {first: "home", home: [], away: []},
-            kickoff: requireValue(this.kickoff, `Missing kickoff in ${JSON.stringify(this)}`),
+            setups: requireValue(this.setups, 'Missing setups', this),
+            wakeups: this.wakeups || { first: "home", home: [], away: [] },
+            kickoff: {
+                roll: requireValue(this.kickoff.roll, 'Missing kickoff.roll', this),
+                target: requireValue(this.kickoff.target, 'Missing kickoff.target', this),
+                scatters: requireValue(this.kickoff.scatters, 'Missing kickoff.scatters', this),
+            },
+            finalScore: this.finalScore || this.initialScore,
         };
     }
 }
@@ -237,7 +483,7 @@ class Drive implements I.Checkpoint {
 
 function emptySetup(): I.SetupAction {
     return {
-        players: new Map(),
+        checkpoint: { playerPositions: new Map() },
         movedPlayers: new Map(),
     };
 }
@@ -255,15 +501,21 @@ export function convertCell(c: B.Cell): I.Cell {
 
 export function convertReplay(incoming: B.Replay): I.Replay {
     let outgoing: Replay = new Replay(incoming.ReplayStep);
-    outgoing.processSteps(incoming);
     outgoing.metadata.filename = incoming.filename;
     outgoing.metadata.url = incoming.url;
+    outgoing.processSteps(incoming);
+    console.log("Finished converting", { outgoing });
     return outgoing.finalize();
+}
+
+function badResult(result: never): never
+function badResult(result: B.BaseResult) {
+    console.error({ msg: 'Unhandled result', result });
 }
 
 function badStep(step: never): never
 function badStep(step: B.ReplayStep) {
-    console.error(`Unhandled step ${JSON.stringify(step)}`);
+    console.error({ msg: 'Unhandled step', step });
 }
 
 function last<T>(xs: T[]): T | undefined {
@@ -274,6 +526,73 @@ function last<T>(xs: T[]): T | undefined {
     }
 }
 
-function convertSide(s: SIDE): I.Side {
+export function convertSide(s: SIDE): I.Side {
     return s == SIDE.home ? 'home' : 'away';
+}
+
+export function playerNumberToSide(n: I.PlayerNumber): I.Side {
+    return n < 30 ? 'home' : 'away';
+}
+
+export function convertPlayerDefinition(p: B.PitchPlayer): I.Player {
+    return {
+        id: {
+            number: p.Id,
+            side: playerNumberToSide(p.Id),
+        },
+        skills: translateStringNumberList(p.Data.ListSkills),
+        type: getPlayerType(p.Data.IdPlayerTypes),
+        name: he.decode(p.Data.Name.toString()),
+        stats: {
+            ma: p.Data.Ma,
+            st: p.Data.St,
+            av: p.Data.Av,
+            ag: p.Data.Ag,
+        }
+    };
+}
+
+export function convertPlayerState(t: B.TeamState, p: B.PitchPlayer): I.PlayerState {
+    return {
+        usedSkills: translateStringNumberList(p.ListUsedSkills),
+        canAct: p.CanAct == 1,
+        status: p.Status || STATUS.standing,
+        disabled: p.Disabled == 1,
+        blitzer: t.BlitzerId == p.Id,
+        situation: p.Situation || SITUATION.Active,
+    };
+}
+
+function convertDiceModifier(modifier: B.DiceModifier): I.DiceModifier {
+    let result: I.DiceModifier = {};
+    if (modifier.Cell) {
+        result.cell = convertCell(modifier.Cell);
+    }
+    if (modifier.Skill && modifier.Skill >= 0) {
+        result.skill = modifier.Skill;
+    }
+    if (modifier.Type) {
+        result.type = modifier.Type;
+    }
+    if (modifier.Value) {
+        result.value = modifier.Value;
+    }
+    return result;
+}
+
+interface DiceRoll {
+    dice: number[],
+    modifiers: I.DiceModifier[],
+    target?: number,
+};
+
+function convertDiceRollResult<R>(result: B.DiceRollResult<R, B.Skills, B.Cells>): DiceRoll {
+    let roll: DiceRoll = {
+        dice: translateStringNumberList(result.CoachChoices.ListDices),
+        modifiers: ensureKeyedList("DiceModifier", result.ListModifiers).map(modifier => convertDiceModifier(modifier))
+    };
+    if ('Requirement' in result) {
+        roll.target = result.Requirement;
+    }
+    return roll;
 }

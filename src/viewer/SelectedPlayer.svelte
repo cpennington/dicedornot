@@ -3,28 +3,48 @@
   import FlexGrid from "./FlexGrid.svelte";
 
   import Player from "./Player.svelte";
-  import { translateStringNumberList } from "../replay-utils.js";
-  import { SKILL_CSS, SITUATION, Casualties, STAR_NAMES, SKILL } from "../constants.js";
+  import {
+    SKILL_CSS,
+    SITUATION,
+    Casualties,
+    STAR_NAMES,
+    SKILL,
+    STATUS,
+  } from "../constants.js";
   import he from "he";
-import type { PlayerNumber } from "../replay/Internal";
-import type { PlayerProps } from "./types";
+  import type { PlayerNumber, Player as IPlayer, PlayerState } from "../replay/Internal";
+  import { playerStates, playerDefs } from "../stores.js";
 
-  export let player: PlayerNumber, players: Record<PlayerNumber, PlayerProps>;
-  let pitchPlayer: PlayerProps, name: string, color: string, skills: SKILL[], cas: string | undefined;
+  export let player: PlayerNumber;
+  let playerState: PlayerState,
+    playerData: IPlayer,
+    name: string,
+    color: string,
+    skills: SKILL[],
+    cas: string | undefined;
   const colorRE = /\[colour='([0-9a-f]{8})'\]/i;
   $: {
-    pitchPlayer = players[player];
-    name = he.decode(pitchPlayer.data.Data.Name.toString().replace(colorRE, ""));
+    playerState = $playerStates.get(player) || {
+      usedSkills: [],
+      canAct: true,
+      status: STATUS.standing,
+      disabled: false,
+      blitzer: false,
+      situation: SITUATION.Active,
+    };
+    playerData = $playerDefs.get(player)!;
+    name = he.decode(playerData.name.replace(colorRE, ""));
     name = STAR_NAMES[name] || name;
-    let colorMatch = pitchPlayer.data.Data.Name.toString().match(colorRE);
+    let colorMatch = playerData.name.match(colorRE);
     color = colorMatch ? `#${colorMatch[1].slice(2, 8)}` : "var(--gray-0)";
-    skills = translateStringNumberList(pitchPlayer.data.Data.ListSkills);
+    skills = playerData.skills;
 
-    if ((pitchPlayer.data.Situation || SITUATION.Active) >= SITUATION.Casualty) {
-      if (pitchPlayer.data.Situation === SITUATION.Casualty) {
+    if ((playerState.situation) >= SITUATION.Casualty) {
+      if (playerState.situation === SITUATION.Casualty) {
         cas =
           Casualties[
-            Math.max(...translateStringNumberList(pitchPlayer.data.ListCasualties))-1
+            Math.max(...(playerData.casualties || []), ...(playerState.casualties || [])) -
+              1
           ].icon;
       } else {
         cas = "Expelled";
@@ -49,25 +69,25 @@ import type { PlayerProps } from "./types";
       <text class="name" x="18" y="36" style={`fill: ${color}`}>{name}</text>
       <text class="stat mv" x="18" y="75" text-anchor="middle">MV</text>
       <text class="stat mv value" x="18" y="109" text-anchor="middle"
-        >{pitchPlayer.data.Data.Ma}</text
+        >{playerData.stats.ma}</text
       >
       <text class="stat st" x="18" y="140" text-anchor="middle">ST</text>
       <text class="stat st value" x="18" y="174" text-anchor="middle"
-        >{pitchPlayer.data.Data.St}</text
+        >{playerData.stats.st}</text
       >
       <text class="stat ag" x="18" y="204" text-anchor="middle">AG</text>
       <text class="stat ag value" x="18" y="238" text-anchor="middle"
-        >{pitchPlayer.data.Data.Ag}</text
+        >{playerData.stats.ag}</text
       >
       <text class="stat av" x="18" y="273" text-anchor="middle">AV</text>
       <text class="stat av value" x="18" y="304" text-anchor="middle"
-        >{pitchPlayer.data.Data.Av}</text
+        >{playerData.stats.av}</text
       >
     </svg>
     <div class="icon-frame">
       <FixedRatio>
         <div class="icon">
-          <Player {...pitchPlayer} />
+          <Player {player} />
         </div>
       </FixedRatio>
     </div>

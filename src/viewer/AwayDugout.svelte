@@ -2,11 +2,9 @@
   import AwayBench from "./AwayBench.svelte";
   import TeamAids from "./TeamAids.svelte";
   import TeamLogo from "./TeamLogo.svelte";
-  import type { CrossFadeFn, Team, PlayerProps } from "./types";
-  import type * as Internal from "../replay/Internal.js";
+  import type { CrossFadeFn, Team} from "./types";
 
-  export let pitchPlayers: Record<Internal.PlayerNumber, PlayerProps>,
-    team: Team,
+  export let team: Team,
     send: CrossFadeFn,
     receive: CrossFadeFn;
 </script>
@@ -19,7 +17,7 @@
   <div class="logo">
     <TeamLogo logo={team.logo} />
   </div>
-  <AwayBench {pitchPlayers} dugout={team.dugout} {send} {receive} />
+  <AwayBench dugout={team.dugout} {send} {receive} />
 </div>
 
 <style>

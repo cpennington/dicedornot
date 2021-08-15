@@ -127,7 +127,7 @@ export class Player {
 
   constructor(team: Team, playerState: BB2.PitchPlayer, boardState: BB2.BoardState) {
     this.team = team;
-    this.id = playerState.Data.Id;
+    this.id = playerState.Id;
     this.playerType = getPlayerType(playerState.Data.IdPlayerTypes);
     this.name = he.decode(playerState.Data.Name.toString().replace(/\[colour='[0-9a-f]{8}'\]/i, '').toString());
     this.name = STAR_NAMES[this.name] || this.name;
@@ -2498,7 +2498,7 @@ export class KickoffRoll extends Roll {
       activePlayer: undefined,
       rollType: ROLL.KickoffEvent,
       ignore: false,
-      actionType: ACTION_TYPE.Kickoff,
+      actionType: ACTION_TYPE.KickoffTarget,
       resultType: RESULT_TYPE.Passed,
       subResultType: undefined,
       isReroll: false,
@@ -2680,7 +2680,7 @@ class KickoffEventRoll extends ModifiedD6SumRoll {
       skillsInEffect: [],
       rollStatus: ROLL_STATUS.NoStatus,
       rollType: ROLL.KickoffEvent,
-      actionType: ACTION_TYPE.Kickoff,
+      actionType: ACTION_TYPE.KickoffTarget,
       activePlayer: undefined,
       dice: [],
       ignore: false,
@@ -2811,7 +2811,7 @@ const ROLL_TYPES: Record<ROLL, string | typeof Action | undefined> = {
   [ROLL.DivingTackle]: "Diving Tackle",
   [ROLL.Dodge]: DodgeRoll,
   [ROLL.DodgePick]: undefined, // Choic to use Dodge
-  [ROLL.DodgePick]: "Dogde Pick",
+  [ROLL.DodgePick]: "Dodge Pick",
   [ROLL.EatTeammate]: "Eat Teammate",
   [ROLL.Fans]: undefined, // Fans
   [ROLL.Fireball]: FireballRoll,

@@ -79,7 +79,7 @@ export type BB2BoardActionResultPosition = {
   resultIdx: number,
   result: BB2.ActionResult<BB2.RulesEventBoardAction>
 };
-export type BB2BoardStatePosition =  {
+export type BB2BoardStatePosition = {
   stepIdx: number,
   step: BB2.GameTurnStep,
   subStep: REPLAY_SUB_STEP.BoardState,
@@ -120,22 +120,35 @@ export type BB2ReplayPosition =
 
 export type InternalReplayPosition =
   {
+    type: 'gameStart',
+    replay: Internal.Replay,
+  } |
+  {
+    type: 'driveStart',
+    driveIdx: number,
+    drive: Internal.Drive
+  } |
+  {
+    type: 'wakeupRoll',
     driveIdx: number,
     wakeupSide: Internal.Side,
     rollIdx: number,
     roll: Internal.WakeupRoll,
   } |
   {
+    type: 'setupAction',
     driveIdx: number,
     setupSide: Internal.Side,
     actionIdx: number,
     action: Internal.SetupAction,
   } | {
+    type: 'wizardRoll',
     driveIdx: number,
     turnIdx: number,
     wizard: 'start' | 'end',
     roll: Internal.WizardRoll,
   } | {
+    type: 'actionStep',
     driveIdx: number,
     turnIdx: number,
     activationIdx: number,
@@ -163,34 +176,36 @@ export interface ReplayPreview {
 export function linearReplay(replay: Internal.Replay & { _linearReplayCache?: ReplayPosition[] }): ReplayPosition[] {
   if (!replay._linearReplayCache) {
     replay._linearReplayCache = new Array(..._linearReplay(replay));
-    console.log("Linear Replay Cache", {linear: replay._linearReplayCache});
+    console.log("Linear Replay Cache", { linear: replay._linearReplayCache });
   }
   return replay._linearReplayCache;
 }
 
 function* _linearReplay(replay: Internal.Replay): Generator<ReplayPosition> {
+  yield { type: 'gameStart', replay };
   for (const [driveIdx, drive] of replay.drives.entries()) {
+    yield { type: 'driveStart', driveIdx, drive }
     for (const wakeupSide of [drive.wakeups.first, Internal.other(drive.wakeups.first)]) {
       for (const [rollIdx, roll] of drive.wakeups[wakeupSide].entries()) {
-        yield { driveIdx, wakeupSide, rollIdx, roll };
+        yield { type: 'wakeupRoll', driveIdx, wakeupSide, rollIdx, roll };
       }
     }
     for (const setupSide of [drive.setups.first, Internal.other(drive.setups.first)]) {
       for (const [actionIdx, action] of drive.setups[setupSide].entries()) {
-        yield { driveIdx, setupSide, actionIdx, action };
+        yield { type: 'setupAction', driveIdx, setupSide, actionIdx, action };
       }
     }
     for (const [turnIdx, turn] of drive.turns.entries()) {
       if (turn.startWizard) {
-        yield { driveIdx, turnIdx, wizard: 'start', roll: turn.startWizard };
+        yield { type: 'wizardRoll', driveIdx, turnIdx, wizard: 'start', roll: turn.startWizard };
       }
       for (const [activationIdx, activation] of turn.activations.entries()) {
         for (const [actionStepIdx, actionStep] of activation.actionSteps.entries()) {
-          yield { driveIdx, turnIdx, activationIdx, actionStepIdx, actionStep }
+          yield { type: 'actionStep', driveIdx, turnIdx, activationIdx, actionStepIdx, actionStep }
         }
       }
       if (turn.endWizard) {
-        yield { driveIdx, turnIdx, wizard: 'end', roll: turn.endWizard };
+        yield { type: 'wizardRoll', driveIdx, turnIdx, wizard: 'end', roll: turn.endWizard };
       }
     }
   }
@@ -200,7 +215,7 @@ function* _linearReplay(replay: Internal.Replay): Generator<ReplayPosition> {
     }
     if ('RulesEventKickOffTable' in step && step.RulesEventKickOffTable) {
       yield { stepIdx, subStep: REPLAY_SUB_STEP.Kickoff, step, kickoff: step.RulesEventKickOffTable };
-      
+
       for (const msg of ensureKeyedList('StringMessage', step.RulesEventKickOffTable.EventResults)) {
         let messageData = parser.parse(he.decode(msg.MessageData), {
           ignoreAttributes: true,

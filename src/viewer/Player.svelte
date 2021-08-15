@@ -1,11 +1,23 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { getPlayerSprite, SIDE } from "../constants.js";
-  import { translateStringNumberList } from "../replay-utils.js";
-  import type { PitchPlayer } from "../replay/BB2.js";
+  import { getPlayerSprite, SIDE, SITUATION, STATUS } from "../constants.js";
+  import type { PlayerNumber, Player, PlayerState } from "../replay/Internal.js";
   import type { CrossFadeFn } from "./types.js";
+  import {playerDefs, playerStates} from "../stores.js";
 
-  export let data: PitchPlayer,
+  export let player: PlayerNumber,
+    send: CrossFadeFn | undefined = undefined,
+    receive: CrossFadeFn | undefined = undefined;
+  let
+    playerDef: Player = $playerDefs.get(player)!,
+    playerState: PlayerState = $playerStates.get(player) || {
+      usedSkills: [],
+      canAct: true,
+      status: STATUS.standing,
+      disabled: false,
+      blitzer: false,
+      situation: SITUATION.Active,
+    },
     team: SIDE,
     done: boolean | undefined = undefined,
     moving: boolean | undefined = undefined,
@@ -13,9 +25,7 @@
     stunned: boolean | undefined = undefined,
     blitz: boolean | undefined = undefined,
     stupidity: string | undefined = undefined,
-    send: CrossFadeFn | undefined = undefined,
-    receive: CrossFadeFn | undefined = undefined;
-  let id,
+    id,
     race,
     model,
     classes: string,
@@ -26,16 +36,16 @@
     _stupidity: string;
 
   $: {
-    ({ model, race } = getPlayerSprite(data.Id, data.Data.IdPlayerTypes));
-    id = data.Id;
-    _done = done === undefined ? data.CanAct != 1 : done;
+    ({ model, race } = getPlayerSprite(playerDef.id.number, playerDef.type));
+    id = playerDef.id;
+    _done = done === undefined ? (!playerState.canAct) : done;
 
     classes = [race, model, team == SIDE.home ? 'home' : 'away', "sprite", "crisp", "player"].join(" ");
     key = `player_${id}`;
-    _prone = prone === undefined ? data.Status === 1 : prone;
-    _stunned = stunned === undefined ? data.Status === 2 : stunned;
-    if (stupidity === undefined && data.Disabled == 1) {
-      let usedSkills = translateStringNumberList(data.ListUsedSkills);
+    _prone = prone === undefined ? playerState.status === STATUS.prone : prone;
+    _stunned = stunned === undefined ? playerState.status === STATUS.stunned : stunned;
+    if (stupidity === undefined && playerState.disabled) {
+      let usedSkills = playerState.usedSkills;
       if (usedSkills.indexOf(20) > -1) {
         //take root
         _stupidity = "Rooted";

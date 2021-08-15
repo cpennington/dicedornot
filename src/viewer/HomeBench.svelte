@@ -1,39 +1,23 @@
 <script lang="ts">
   import CasBox from "./CasBox.svelte";
   import { SIDE } from "../constants.js";
-  import type * as Internal from "../replay/Internal.js";
-  import type { CrossFadeFn, Dugout, PlayerProps } from "./types.js";
-  export let pitchPlayers: Record<Internal.PlayerNumber, PlayerProps>,
-    dugout: Dugout,
+  import type { CrossFadeFn, Dugout } from "./types.js";
+  export let dugout: Dugout,
     send: CrossFadeFn,
     receive: CrossFadeFn;
+  const casTypes: (keyof Dugout)[] = ["cas", "ko", "reserve"];
 </script>
 
 <div class="bench">
+  {#each casTypes as casType}
   <CasBox
-    {pitchPlayers}
     team={SIDE.home}
-    casType="cas"
+    {casType}
     {dugout}
     {send}
     {receive}
   />
-  <CasBox
-    {pitchPlayers}
-    team={SIDE.home}
-    casType="ko"
-    {dugout}
-    {send}
-    {receive}
-  />
-  <CasBox
-    {pitchPlayers}
-    team={SIDE.home}
-    casType="reserve"
-    {dugout}
-    {send}
-    {receive}
-  />
+  {/each}
 </div>
 
 <style>

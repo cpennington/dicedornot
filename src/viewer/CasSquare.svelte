@@ -1,11 +1,10 @@
 <script lang="ts">
   import Player from "./Player.svelte";
-  import { selectedPlayer, hoveredPlayer } from "../stores.js";
+  import { selectedPlayer, hoveredPlayer, playerDefs, playerStates } from "../stores.js";
   import { SITUATION, Casualties, SIDE } from "../constants.js";
-  import { translateStringNumberList } from "../replay-utils.js";
-  import type { PlayerProps, Dugout, CrossFadeFn } from "./types";
-  import type { PlayerNumber } from "../replay/Internal";
-  export let pitchPlayers: Record<PlayerNumber, PlayerProps>,
+  import type { Dugout, CrossFadeFn } from "./types";
+  import type { Player as IPlayer, PlayerState } from "../replay/Internal";
+  export let
     team: SIDE,
     dugout: Dugout,
     row: number,
@@ -15,7 +14,8 @@
     casType: keyof Dugout,
     send: CrossFadeFn | undefined,
     receive: CrossFadeFn | undefined;
-  let player: PlayerProps | undefined = undefined,
+  let player: IPlayer | undefined = undefined,
+    playerState: PlayerState | undefined = undefined,
     players,
     id: string,
     cas: string | undefined = undefined;
@@ -30,15 +30,16 @@
       } else {
         players = dugout[casType];
       }
-      player = pitchPlayers[players[column * height + row]];
+      let playerNumber = players[column * height + row];
+      player = $playerDefs.get(playerNumber);
+      playerState = $playerStates.get(playerNumber);
     }
 
-    if (player && (player.data.Situation || SITUATION.Active) >= SITUATION.Casualty) {
-      if (player.data.Situation === SITUATION.Casualty) {
+    if (playerState && (playerState.situation>= SITUATION.Casualty)) {
+      if (playerState.situation === SITUATION.Casualty) {
         cas =
           Casualties[
-            Math.max(...translateStringNumberList(player.data.ListCasualties)) -
-              1
+            Math.max(...(playerState.casualties || [])) - 1
           ].icon;
       } else {
         cas = "Expelled";
@@ -51,17 +52,17 @@
   class="cas-square"
   {id}
   on:click={() => {
-    $selectedPlayer = player && player.data.Id;
+    $selectedPlayer = player && player.id.number;
   }}
   on:mouseover={() => {
-    $hoveredPlayer = player && player.data.Id;
+    $hoveredPlayer = player && player.id.number;
   }}
   on:mouseleave={() => {
     $hoveredPlayer = undefined;
   }}
 >
   {#if player}
-    <Player {...player} {send} {receive} />
+    <Player player={player.id.number} {send} {receive} />
     {#if cas}
       <img class="cas" src={`/images/skills/${cas}.png`} alt={cas} />
     {/if}
