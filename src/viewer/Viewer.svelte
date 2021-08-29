@@ -615,7 +615,6 @@
           pitch = new Map();
           $playerStates = new Map();
           jumpToPosition($replayPreview.start, false);
-          // resetFromBoardState($replay.fullReplay.unhandledSteps[$replayPreview.start.step - 1].BoardState, true);
         }
         if (
           underPreview &&

@@ -40,7 +40,10 @@
         cas =
           Casualties[
             Math.max(...(playerState.casualties || [])) - 1
-          ].icon;
+          ]?.icon;
+        if (!cas) {
+          console.log("Couldn't find cas icon", {playerState, Casualties})
+        }
       } else {
         cas = "Expelled";
       }

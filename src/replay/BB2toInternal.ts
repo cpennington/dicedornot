@@ -599,6 +599,7 @@ export function convertPlayerState(t: B.TeamState, p: B.PitchPlayer): I.PlayerSt
         disabled: p.Disabled == 1,
         blitzer: t.BlitzerId == p.Id,
         situation: p.Situation || SITUATION.Active,
+        casualties: translateStringNumberList(p.ListCasualties),
     };
 }
 

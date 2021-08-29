@@ -2329,21 +2329,21 @@ export class CasualtyRoll extends Roll {
   }
 
   casName(dice: number[]): string {
-    if (dice[0] < 4) {
+    if (dice[0] < 40) {
       return "Badly Hurt";
-    } else if (dice[0] < 5) {
+    } else if (dice[0] < 50) {
       return "Miss Next Game";
-    } else if (dice[0] == 5 && dice[1] <= 2) {
+    } else if (dice[0]<= 52) {
       return "Niggling Injury";
-    } else if (dice[0] == 5 && dice[1] <= 4) {
+    } else if (dice[0] <= 54) {
       return "-MA";
-    } else if (dice[0] == 5 && dice[1] <= 6) {
+    } else if (dice[0] <= 56) {
       return "-AV";
-    } else if (dice[0] == 5 && dice[1] == 7) {
+    } else if (dice[0] <= 57) {
       return "-AG";
-    } else if (dice[0] == 5 && dice[1] == 8) {
+    } else if (dice[0] <= 58) {
       return "-ST";
-    } else if (dice[0] == 6) {
+    } else if (dice[0] <= 68) {
       return "Dead!";
     }
     return `Unknown Injury ${dice}`

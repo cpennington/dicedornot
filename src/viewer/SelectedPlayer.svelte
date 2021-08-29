@@ -45,7 +45,7 @@
           Casualties[
             Math.max(...(playerData.casualties || []), ...(playerState.casualties || [])) -
               1
-          ].icon;
+          ]?.icon;
       } else {
         cas = "Expelled";
       }
