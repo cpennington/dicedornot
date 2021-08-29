@@ -68,6 +68,25 @@ export interface PlayerId {
     number: PlayerNumber;
 }
 
+export interface DiceRoll {
+    dice: number[],
+    modifiers: DiceModifier[],
+    target?: number,
+};
+
+export interface WithPileOn {
+    pileOn?: DiceRoll,
+}
+
+export interface Damage {
+    player: PlayerId,
+    injury?: DiceRoll,
+    armor?: DiceRoll & WithPileOn,
+    casualty?: DiceRoll & WithPileOn,
+    regeneration?: DiceRoll,
+    raiseDead?: boolean,
+}
+
 export interface Player {
     id: PlayerId,
     skills: SKILL[],
@@ -115,7 +134,7 @@ export interface Drive {
     wakeups: KickoffOrder<WakeupRoll[]>;
     setups: KickoffOrder<SetupAction[]>;
     kickoff: {
-        roll: KickoffRoll,
+        eventRoll: KickoffRoll,
         target: Cell,
         scatters: Cell[],
         rockDamage?: TakeDamageRoll[],

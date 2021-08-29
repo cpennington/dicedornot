@@ -87,7 +87,7 @@ class Replay {
             } else if ('RulesEventSetUpAction' in step) {
                 this.handleSetUpAction(step);
             } else if ('RulesEventSetUpConfiguration' in step) {
-                this.cantHandle(step, "Can't handle RulesEventSetUpConfiguration");
+                this.handleSetUpConfiguration(step);
             } else if ('RulesEventSetGeneratedPersonnalities' in step) {
                 // don't need to handle this
             } else if (
@@ -179,6 +179,31 @@ class Replay {
         }
 
         this.metadata.league = step.GameInfos.RowLeague.Name && he.decode(step.GameInfos.RowLeague.Name.toString());
+    }
+
+    handleSetUpConfiguration(step: B.SetUpConfigurationStep) {
+        const side = convertSide(step.RulesEventWaitingRequest == '' ? SIDE.home : step.RulesEventWaitingRequest.ConcernedTeam || SIDE.home);
+        let currentDrive = this.lastDrive();
+        if (currentDrive.setups == undefined) {
+            currentDrive.setups = { first: side, home: [], away: [] };
+        }
+        let currentSetup = currentDrive.setups[side];
+        let latestSetup = last(currentSetup);
+        let players: Map<I.PlayerNumber, I.Cell>;
+        if (latestSetup) {
+            players = new Map(latestSetup.checkpoint.playerPositions);
+            latestSetup.movedPlayers.forEach((position, id) => players.set(id, position));
+        } else {
+            players = new Map();
+        }
+
+        let nextSetup = {
+            checkpoint: { playerPositions: players },
+            movedPlayers: new Map(step.RulesEventSetUpConfiguration.ListPlayersPositions.PlayerPosition.map(pos => {
+                return [pos.PlayerId || 0, convertCell(pos.Position)];
+            }))
+        }
+        currentSetup.push(nextSetup);
     }
 
     handleSetUpAction(step: B.SetUpActionStep) {
@@ -382,7 +407,7 @@ function convertKickoffScatter(replay: Replay, action: B.ScatterAction): void {
 
 function convertTakeDamage(replay: Replay, action: B.TakeDamageAction): void {
     let drive = replay.lastDrive();
-    let damage: Damage = {
+    let damage: I.Damage = {
         player: {
             side: playerNumberToSide(action.PlayerId || 0),
             number: action.PlayerId || 0,
@@ -403,16 +428,22 @@ function convertTakeDamage(replay: Replay, action: B.TakeDamageAction): void {
                 damage.regeneration = convertDiceRollResult(result);
                 break
             case ROLL.PileOnArmorRoll:
-                damage.armor.pileOn = convertDiceRollResult(result);
+                if ('ListDices' in result.CoachChoices) {
+                    assert('ListDices' in result);
+                    damage.armor!.pileOn = convertDiceRollResult(result);
+                }
                 break
             case ROLL.PileOnInjuryRoll:
-                damage.casualty.pileOn = convertDiceRollResult(result);
+                if ('ListDices' in result.CoachChoices) {
+                    assert('ListDices' in result);
+                    damage.casualty!.pileOn = convertDiceRollResult(result);
+                }
                 break
             case ROLL.ChainsawArmor:
                 damage.armor = convertDiceRollResult(result);
                 break
             case ROLL.RaiseDead:
-                damage.raiseDead = convertDiceRollResult(result);
+                damage.raiseDead = true;
                 break
             default:
                 badResult(result);
@@ -470,7 +501,7 @@ class Drive {
             setups: requireValue(this.setups, 'Missing setups', this),
             wakeups: this.wakeups || { first: "home", home: [], away: [] },
             kickoff: {
-                roll: requireValue(this.kickoff.roll, 'Missing kickoff.roll', this),
+                eventRoll: requireValue(this.kickoff.roll, 'Missing kickoff.roll', this),
                 target: requireValue(this.kickoff.target, 'Missing kickoff.target', this),
                 scatters: requireValue(this.kickoff.scatters, 'Missing kickoff.scatters', this),
             },
@@ -580,14 +611,8 @@ function convertDiceModifier(modifier: B.DiceModifier): I.DiceModifier {
     return result;
 }
 
-interface DiceRoll {
-    dice: number[],
-    modifiers: I.DiceModifier[],
-    target?: number,
-};
-
-function convertDiceRollResult<R>(result: B.DiceRollResult<R, B.Skills, B.Cells>): DiceRoll {
-    let roll: DiceRoll = {
+function convertDiceRollResult<R>(result: B.DiceRollResult<R, B.Skills, B.Cells>): I.DiceRoll {
+    let roll: I.DiceRoll = {
         dice: translateStringNumberList(result.CoachChoices.ListDices),
         modifiers: ensureKeyedList("DiceModifier", result.ListModifiers).map(modifier => convertDiceModifier(modifier))
     };
