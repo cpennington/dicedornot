@@ -69,7 +69,7 @@ class Replay {
         };
     }
 
-    processSteps(incoming: B.Replay) {
+    processUnorderedSteps() {
         // Handle un-ordered replay steps
         for (let step of this.unhandledSteps) {
             if ('RulesEventGameFinished' in step) {
@@ -78,6 +78,10 @@ class Replay {
                 this.handleGameInfo(step);
             }
         }
+    }
+
+    processSteps() {
+        this.processUnorderedSteps();
         while (!this.foundUnhandledStep && this.unhandledSteps.length > 0) {
             let step = this.unhandledSteps.shift()!;
             if ('RulesEventGameFinished' in step || 'GameInfos' in step) {
@@ -124,7 +128,6 @@ class Replay {
                 const pitchPlayer = pitchPlayers.find(p => p.Id = merc.MercenaryId);
                 assert(pitchPlayer != undefined);
                 const player: I.Player = convertPlayerDefinition(pitchPlayer);
-                console.log("Adding mercenary", {team, player, pitchPlayer, step, replay: this});
                 team.players.set(player.id.number, player)
                 team.inducements.mercenaries.set(player.id.number, player);
             }
@@ -542,9 +545,18 @@ export function convertReplay(incoming: B.Replay): I.Replay {
     let outgoing: Replay = new Replay(incoming.ReplayStep);
     outgoing.metadata.filename = incoming.filename;
     outgoing.metadata.url = incoming.url;
-    outgoing.processSteps(incoming);
+    outgoing.processSteps();
     console.log("Finished converting", { outgoing });
-    return outgoing.finalize();
+    try {
+        return outgoing.finalize();
+    } catch {
+        console.error("Error finalizing ordered steps, using only unordered steps");
+        outgoing = new Replay(incoming.ReplayStep);
+        outgoing.metadata.filename = incoming.filename;
+        outgoing.metadata.url = incoming.url;
+        outgoing.processUnorderedSteps();
+        return outgoing.finalize();
+    }
 }
 
 function badResult(result: never): never
