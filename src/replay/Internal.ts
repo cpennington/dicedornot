@@ -114,8 +114,9 @@ export interface Checkpoint {
     playerPositions: Map<PlayerNumber, Cell>
 }
 
-export type KickoffRoll = {
+export type KickoffEvent = {
     dice: number[],
+    cancelled: boolean,
 };
 export type SetupAction = {
     checkpoint: Checkpoint,
@@ -134,7 +135,7 @@ export interface Drive {
     wakeups: KickoffOrder<WakeupRoll[]>;
     setups: KickoffOrder<SetupAction[]>;
     kickoff: {
-        eventRoll: KickoffRoll,
+        event: KickoffEvent,
         target: Cell,
         scatters: Cell[],
         rockDamage?: TakeDamageRoll[],

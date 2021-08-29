@@ -270,8 +270,15 @@ class Replay {
         if (
             step.RulesEventKickOffEventCancelled
         ) {
-            this.cantHandle(step, "Can't handle RulesEventKickOffEventCancelled");
-            return;
+            let drive = last(this.drives);
+            if (drive === undefined) {
+                drive = new Drive();
+                this.drives.push(drive);
+            }
+            drive.kickoff.event = {
+                dice: [step.RulesEventKickOffEventCancelled.EventCancelled],
+                cancelled: true,
+            };
         }
         if (
             step.RulesEventLoadGame
@@ -293,8 +300,9 @@ class Replay {
                 drive = new Drive();
                 this.drives.push(drive);
             }
-            drive.kickoff.roll = {
+            drive.kickoff.event = {
                 dice: translateStringNumberList(step.RulesEventKickOffTable.ListDice),
+                cancelled: false,
             }
         }
         if (step.RulesEventBoardAction) {
@@ -484,7 +492,7 @@ class Drive {
         public wakeups?: I.KickoffOrder<I.WakeupRoll[]>,
         public setups?: I.KickoffOrder<I.SetupAction[]>,
         public kickoff: {
-            roll?: I.KickoffRoll,
+            event?: I.KickoffEvent,
             target?: I.Cell,
             scatters?: I.Cell[],
             rockDamage?: I.TakeDamageRoll[],
@@ -501,7 +509,7 @@ class Drive {
             setups: requireValue(this.setups, 'Missing setups', this),
             wakeups: this.wakeups || { first: "home", home: [], away: [] },
             kickoff: {
-                eventRoll: requireValue(this.kickoff.roll, 'Missing kickoff.roll', this),
+                event: requireValue(this.kickoff.event, 'Missing kickoff.event', this),
                 target: requireValue(this.kickoff.target, 'Missing kickoff.target', this),
                 scatters: requireValue(this.kickoff.scatters, 'Missing kickoff.scatters', this),
             },
