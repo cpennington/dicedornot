@@ -34,6 +34,18 @@
   const rebblRE = /.*rebbl\.net\/rebbl\/match\/([0-9a-f]*)/i;
   const goblinspyRE = /.*mordrek\.com\/gspy\/.*match\/((cid_)?[0-9a-f]*)/i
   const spikeRE = /.*spike\.ovh\/match\?match_uuid=([0-9a-f]*)/i
+  const METADATA_KEY = "replay-metadata-v1";
+
+  type ReplayMetadata = {
+    homeCoach: string,
+    homeTeam: string,
+    homeScore: number,
+    awayCoach: string,
+    awayTeam: string,
+    awayScore: number,
+    date: Date,
+    cacheKey: IDBValidKey,
+  };
 
   async function replayFromCache(key: IDBValidKey): Promise<Internal.Replay | undefined> {
     let cachedReplay = await get(key);
@@ -110,34 +122,42 @@
     $error = `Unable to understad match url ${urlPicker.value}. Try something like https://rebbl.net/rebbl/match/1234abcd, https://www.mordrek.com/gspy/comp/1234/match/abcd1234, or https://spike.ovh/match?match_uuid=abcd1234`;
   }
 
-  async function cachedReplays() {
-    if (!replayKeys) {
-        loading = "Loading saved replays";
-        replayKeys = await keys();
-        loading = undefined;
-    }
-    const allReplays: {key: IDBValidKey, replay: Internal.Replay}[] = [];
-    for (const key of replayKeys) {
-      loading = `Loading ${key}`;
-      const replay = await replayFromCache(key);
-      if (replay) {
-        allReplays.push({key, replay});
-      }
-    }
+  async function cachedReplays(): Promise<ReplayMetadata[]> {
+    loading = "Loading replay metadata";
+    let replayMetadata = await get(METADATA_KEY);
     loading = undefined;
-    console.log(allReplays);
-    return allReplays.map(({key: cacheKey, replay: replayJSON}) => {
-      return {
-        homeCoach: replayJSON.teams.home.coach,
-        homeTeam: replayJSON.teams.home.name,
-        homeScore: replayJSON.finalScore.home,
-        awayCoach: replayJSON.teams.away.coach,
-        awayTeam: replayJSON.teams.away.name,
-        awayScore: replayJSON.finalScore.away,
-        date: replayJSON.metadata.datePlayed,
-        cacheKey,
-      };
-    });
+
+    if (!replayMetadata) {
+      if (!replayKeys) {
+          loading = "Loading saved replays";
+          replayKeys = await keys();
+          loading = undefined;
+      }
+      const allReplays: {key: IDBValidKey, replay: Internal.Replay}[] = [];
+      for (const key of replayKeys) {
+        loading = `Loading ${key}`;
+        const replay = await replayFromCache(key);
+        if (replay) {
+          allReplays.push({key, replay});
+        }
+      }
+      loading = undefined;
+      console.log(allReplays);
+      replayMetadata = allReplays.map(({key: cacheKey, replay: replayJSON}) => {
+        return {
+          homeCoach: replayJSON.teams.home.coach,
+          homeTeam: replayJSON.teams.home.name,
+          homeScore: replayJSON.finalScore.home,
+          awayCoach: replayJSON.teams.away.coach,
+          awayTeam: replayJSON.teams.away.name,
+          awayScore: replayJSON.finalScore.away,
+          date: replayJSON.metadata.datePlayed,
+          cacheKey,
+        };
+      });
+      await set(METADATA_KEY, replayMetadata);
+    }
+    return replayMetadata;
   }
 
   async function loadFromCache(cacheKey: string, updateUrl = false) {
