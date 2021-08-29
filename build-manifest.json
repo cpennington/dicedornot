@@ -1041,7 +1041,7 @@
       ]
     },
     "dist/viewer/Overlay.svelte.js": {
-      "bytes": 15041,
+      "bytes": 15057,
       "imports": [
         {
           "path": "_snowpack/pkg/svelte/internal.js",
@@ -1928,7 +1928,7 @@
           "bytesInOutput": 274
         },
         "dist/viewer/Overlay.svelte.js": {
-          "bytesInOutput": 5037
+          "bytesInOutput": 5043
         },
         "dist/viewer/Pitch.svelte.js": {
           "bytesInOutput": 2154
@@ -2021,7 +2021,7 @@
           "bytesInOutput": 69
         }
       },
-      "bytes": 1413880
+      "bytes": 1413886
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
