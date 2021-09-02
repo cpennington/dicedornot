@@ -143,7 +143,7 @@
       ]
     },
     "dist/replay/BB2toInternal.js": {
-      "bytes": 19000,
+      "bytes": 21131,
       "imports": [
         {
           "path": "dist/constants.js",
@@ -1714,7 +1714,7 @@
           "bytesInOutput": 118
         },
         "dist/replay/BB2toInternal.js": {
-          "bytesInOutput": 10582
+          "bytesInOutput": 11716
         },
         "dist/rolls.js": {
           "bytesInOutput": 45099
@@ -1969,7 +1969,7 @@
           "bytesInOutput": 0
         },
         "_snowpack/pkg/common/vega.module-d77aac5f.js": {
-          "bytesInOutput": 507532
+          "bytesInOutput": 507538
         },
         "_snowpack/pkg/vega-embed.js": {
           "bytesInOutput": 344179
@@ -2017,7 +2017,7 @@
           "bytesInOutput": 69
         }
       },
-      "bytes": 1421063
+      "bytes": 1422203
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
