@@ -12,7 +12,13 @@
   on:mouseover={() => {
     $hoveredPlayer = player.id;
   }}
+  on:focus={() => {
+    $hoveredPlayer = player.id;
+  }}
   on:mouseleave={() => {
+    $hoveredPlayer = undefined;
+  }}
+  on:blur={() => {
     $hoveredPlayer = undefined;
   }}>{player.name}</span
 >

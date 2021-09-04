@@ -9,8 +9,8 @@
 
   let isOpen = false;
 
-  function handleUpdate(event: {detail: {isOpen: boolean}}) {
-    isOpen = event.detail.isOpen;
+  function handleUpdate(event: CustomEvent<boolean>) {
+    isOpen = event.detail;
   }
 
 </script>

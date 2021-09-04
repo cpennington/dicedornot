@@ -652,7 +652,6 @@
         console.error(err);
       }
     }
-    console.error("Player Loop terminated unexpectedly");
   }
 
   function jumpToPreviousActivation() {
@@ -818,14 +817,14 @@
     console.log("Teams", { teams });
   }
 
-  function handleGameStart(position: {
+  async function handleGameStart(position: {
     type: "gameStart";
     replay: Internal.Replay;
   }) {
     weather = position.replay.initialWeather;
   }
 
-  function handleDriveStart(position: {
+  async function handleDriveStart(position: {
     type: "driveStart";
     driveIdx: number;
     drive: Internal.Drive;
@@ -1386,7 +1385,7 @@
     </div>
   </div>
   {#if $replay && $replay.unknownRolls.length > 0}
-    <Alert warning>
+    <Alert color='warning'>
       <details>
         <summary>
           The following rolls aren't able to be analyzed yet. Please <a

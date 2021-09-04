@@ -12,6 +12,7 @@
       class={`list-group-item list-group-item-action team-${action.activeTeam?.id || SIDE.home}`}
       class:active={selectedAction == action.actionIndex}
       on:mouseover={() => ($replayPreview = {start: action.startIndex, end: action.endIndex})}
+      on:focus={() => ($replayPreview = {start: action.startIndex, end: action.endIndex})}
     >
       <Roll {action} selected={selectedAction == action.actionIndex} />
     </div>

@@ -60,7 +60,13 @@
   on:mouseover={() => {
     $hoveredPlayer = player && player.id.number;
   }}
+  on:focus={() => {
+    $hoveredPlayer = player && player.id.number;
+  }}
   on:mouseleave={() => {
+    $hoveredPlayer = undefined;
+  }}
+  on:blur={() => {
     $hoveredPlayer = undefined;
   }}
 >

@@ -37,7 +37,13 @@
   on:mouseover={() => {
     $hoveredPlayer = player;
   }}
+  on:focus={() => {
+    $hoveredPlayer = player;
+  }}
   on:mouseleave={() => {
+    $hoveredPlayer = undefined;
+  }}
+  on:blur={() => {
     $hoveredPlayer = undefined;
   }}
 >

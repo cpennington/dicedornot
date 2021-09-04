@@ -28,6 +28,7 @@
   title={`${teamName}: Turn ${turn}`}
   on:click={() => ($replayTarget = startIndex)}
   on:mouseover={() => ($replayPreview = { start: startIndex, end: endIndex })}
+  on:focus={() => ($replayPreview = { start: startIndex, end: endIndex })}
 >
   {turn}
 </div>
