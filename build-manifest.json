@@ -445,7 +445,7 @@
       "imports": []
     },
     "dist/viewer/Player.svelte.js": {
-      "bytes": 6480,
+      "bytes": 6326,
       "imports": [
         {
           "path": "dist/viewer/Player.svelte.css",
@@ -1809,7 +1809,7 @@
           "bytesInOutput": 0
         },
         "dist/viewer/Player.svelte.js": {
-          "bytesInOutput": 2035
+          "bytesInOutput": 1995
         },
         "dist/viewer/CasSquare.svelte.js": {
           "bytesInOutput": 2541
@@ -2037,7 +2037,7 @@
           "bytesInOutput": 69
         }
       },
-      "bytes": 1422653
+      "bytes": 1422613
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
