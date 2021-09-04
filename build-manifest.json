@@ -1516,7 +1516,7 @@
       ]
     },
     "dist/RollDetails.svelte.js": {
-      "bytes": 4407,
+      "bytes": 4317,
       "imports": [
         {
           "path": "_snowpack/pkg/svelte/internal.js",
@@ -2025,7 +2025,7 @@
           "bytesInOutput": 1877
         },
         "dist/RollDetails.svelte.js": {
-          "bytesInOutput": 1224
+          "bytesInOutput": 1207
         },
         "dist/ActionPane.svelte.js": {
           "bytesInOutput": 917
@@ -2037,7 +2037,7 @@
           "bytesInOutput": 69
         }
       },
-      "bytes": 1422670
+      "bytes": 1422653
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
