@@ -16,7 +16,7 @@
       "bytes": 168,
       "imports": []
     },
-    "_snowpack/pkg/common/index-8de91fcb.js": {
+    "_snowpack/pkg/common/index-5115deaa.js": {
       "bytes": 31608,
       "imports": []
     },
@@ -24,7 +24,7 @@
       "bytes": 945,
       "imports": [
         {
-          "path": "_snowpack/pkg/common/index-8de91fcb.js",
+          "path": "_snowpack/pkg/common/index-5115deaa.js",
           "kind": "import-statement"
         }
       ]
@@ -37,7 +37,7 @@
       "bytes": 70,
       "imports": [
         {
-          "path": "_snowpack/pkg/common/index-8de91fcb.js",
+          "path": "_snowpack/pkg/common/index-5115deaa.js",
           "kind": "import-statement"
         }
       ]
@@ -81,7 +81,7 @@
       "bytes": 1785,
       "imports": [
         {
-          "path": "_snowpack/pkg/common/index-8de91fcb.js",
+          "path": "_snowpack/pkg/common/index-5115deaa.js",
           "kind": "import-statement"
         }
       ]
@@ -275,7 +275,7 @@
       "bytes": 192,
       "imports": []
     },
-    "_snowpack/pkg/common/index-66c94361.js": {
+    "_snowpack/pkg/common/index-a694bb8c.js": {
       "bytes": 4806,
       "imports": [
         {
@@ -283,7 +283,7 @@
           "kind": "import-statement"
         },
         {
-          "path": "_snowpack/pkg/common/index-8de91fcb.js",
+          "path": "_snowpack/pkg/common/index-5115deaa.js",
           "kind": "import-statement"
         }
       ]
@@ -292,11 +292,11 @@
       "bytes": 66206,
       "imports": [
         {
-          "path": "_snowpack/pkg/common/index-8de91fcb.js",
+          "path": "_snowpack/pkg/common/index-5115deaa.js",
           "kind": "import-statement"
         },
         {
-          "path": "_snowpack/pkg/common/index-66c94361.js",
+          "path": "_snowpack/pkg/common/index-a694bb8c.js",
           "kind": "import-statement"
         },
         {
@@ -322,178 +322,6 @@
         },
         {
           "path": "_snowpack/pkg/sveltestrap.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/stores.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "dist/Turn.svelte.css": {
-      "bytes": 644,
-      "imports": []
-    },
-    "dist/Distribution.svelte.js": {
-      "bytes": 23649,
-      "imports": [
-        {
-          "path": "_snowpack/pkg/svelte/internal.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/distribution.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "dist/RollDescription.svelte.css": {
-      "bytes": 47,
-      "imports": []
-    },
-    "dist/PlayerPill.svelte.css": {
-      "bytes": 225,
-      "imports": []
-    },
-    "dist/PlayerPill.svelte.js": {
-      "bytes": 2598,
-      "imports": [
-        {
-          "path": "dist/PlayerPill.svelte.css",
-          "kind": "import-statement"
-        },
-        {
-          "path": "_snowpack/pkg/svelte/internal.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/stores.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "dist/Dice.svelte.css": {
-      "bytes": 162,
-      "imports": []
-    },
-    "dist/Dice.svelte.js": {
-      "bytes": 4818,
-      "imports": [
-        {
-          "path": "dist/Dice.svelte.css",
-          "kind": "import-statement"
-        },
-        {
-          "path": "_snowpack/pkg/svelte/internal.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/constants.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "dist/RollDescription.svelte.js": {
-      "bytes": 23761,
-      "imports": [
-        {
-          "path": "dist/RollDescription.svelte.css",
-          "kind": "import-statement"
-        },
-        {
-          "path": "_snowpack/pkg/svelte/internal.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/constants.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/PlayerPill.svelte.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/rolls.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/Dice.svelte.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "dist/RollOutcomes.svelte.js": {
-      "bytes": 5376,
-      "imports": [
-        {
-          "path": "_snowpack/pkg/svelte/internal.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/RollDescription.svelte.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "dist/Roll.svelte.js": {
-      "bytes": 17960,
-      "imports": [
-        {
-          "path": "_snowpack/pkg/svelte/internal.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/Distribution.svelte.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/RollOutcomes.svelte.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/stores.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "_snowpack/pkg/sveltestrap.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "dist/Turn.svelte.js": {
-      "bytes": 5606,
-      "imports": [
-        {
-          "path": "dist/Turn.svelte.css",
-          "kind": "import-statement"
-        },
-        {
-          "path": "_snowpack/pkg/svelte/internal.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/Roll.svelte.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/stores.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/constants.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "dist/RollDetails.svelte.js": {
-      "bytes": 4778,
-      "imports": [
-        {
-          "path": "_snowpack/pkg/svelte/internal.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/Turn.svelte.js",
           "kind": "import-statement"
         },
         {
@@ -549,7 +377,7 @@
       "bytes": 149,
       "imports": [
         {
-          "path": "_snowpack/pkg/common/index-66c94361.js",
+          "path": "_snowpack/pkg/common/index-a694bb8c.js",
           "kind": "import-statement"
         },
         {
@@ -557,7 +385,7 @@
           "kind": "import-statement"
         },
         {
-          "path": "_snowpack/pkg/common/index-8de91fcb.js",
+          "path": "_snowpack/pkg/common/index-5115deaa.js",
           "kind": "import-statement"
         }
       ]
@@ -1278,44 +1106,6 @@
         }
       ]
     },
-    "dist/TurnSelector.svelte.css": {
-      "bytes": 1049,
-      "imports": []
-    },
-    "dist/TurnSelector.svelte.js": {
-      "bytes": 3779,
-      "imports": [
-        {
-          "path": "dist/TurnSelector.svelte.css",
-          "kind": "import-statement"
-        },
-        {
-          "path": "_snowpack/pkg/svelte/internal.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/stores.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "dist/TurnSelectors.svelte.js": {
-      "bytes": 4742,
-      "imports": [
-        {
-          "path": "_snowpack/pkg/svelte/internal.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/TurnSelector.svelte.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/stores.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
     "dist/Error.svelte.css": {
       "bytes": 49,
       "imports": []
@@ -1532,8 +1322,239 @@
         }
       ]
     },
+    "dist/TurnSelector.svelte.css": {
+      "bytes": 1049,
+      "imports": []
+    },
+    "dist/TurnSelector.svelte.js": {
+      "bytes": 3779,
+      "imports": [
+        {
+          "path": "dist/TurnSelector.svelte.css",
+          "kind": "import-statement"
+        },
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/stores.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/TurnSelectors.svelte.js": {
+      "bytes": 4035,
+      "imports": [
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/TurnSelector.svelte.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/stores.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/Turn.svelte.css": {
+      "bytes": 644,
+      "imports": []
+    },
+    "dist/Distribution.svelte.js": {
+      "bytes": 23649,
+      "imports": [
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/distribution.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/RollDescription.svelte.css": {
+      "bytes": 47,
+      "imports": []
+    },
+    "dist/PlayerPill.svelte.css": {
+      "bytes": 225,
+      "imports": []
+    },
+    "dist/PlayerPill.svelte.js": {
+      "bytes": 2598,
+      "imports": [
+        {
+          "path": "dist/PlayerPill.svelte.css",
+          "kind": "import-statement"
+        },
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/stores.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/Dice.svelte.css": {
+      "bytes": 162,
+      "imports": []
+    },
+    "dist/Dice.svelte.js": {
+      "bytes": 4818,
+      "imports": [
+        {
+          "path": "dist/Dice.svelte.css",
+          "kind": "import-statement"
+        },
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/constants.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/RollDescription.svelte.js": {
+      "bytes": 23761,
+      "imports": [
+        {
+          "path": "dist/RollDescription.svelte.css",
+          "kind": "import-statement"
+        },
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/constants.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/PlayerPill.svelte.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/rolls.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Dice.svelte.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/RollOutcomes.svelte.js": {
+      "bytes": 5376,
+      "imports": [
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/RollDescription.svelte.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/Roll.svelte.js": {
+      "bytes": 17960,
+      "imports": [
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Distribution.svelte.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/RollOutcomes.svelte.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/stores.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "_snowpack/pkg/sveltestrap.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/Turn.svelte.js": {
+      "bytes": 5606,
+      "imports": [
+        {
+          "path": "dist/Turn.svelte.css",
+          "kind": "import-statement"
+        },
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Roll.svelte.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/stores.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/constants.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/RollDetails.svelte.js": {
+      "bytes": 4407,
+      "imports": [
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Turn.svelte.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/stores.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/ActionPane.svelte.js": {
+      "bytes": 3107,
+      "imports": [
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/TurnSelectors.svelte.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/RollDetails.svelte.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/stores.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
     "dist/App.svelte.js": {
-      "bytes": 25041,
+      "bytes": 24631,
       "imports": [
         {
           "path": "dist/App.svelte.css",
@@ -1549,10 +1570,6 @@
         },
         {
           "path": "dist/Summary.svelte.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/RollDetails.svelte.js",
           "kind": "import-statement"
         },
         {
@@ -1577,10 +1594,6 @@
         },
         {
           "path": "dist/stores.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/TurnSelectors.svelte.js",
           "kind": "import-statement"
         },
         {
@@ -1613,6 +1626,10 @@
         },
         {
           "path": "dist/Theme.svelte.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/ActionPane.svelte.js",
           "kind": "import-statement"
         }
       ]
@@ -1665,7 +1682,7 @@
         "dist/App.svelte.css": {
           "bytesInOutput": 0
         },
-        "_snowpack/pkg/common/index-8de91fcb.js": {
+        "_snowpack/pkg/common/index-5115deaa.js": {
           "bytesInOutput": 10097
         },
         "_snowpack/pkg/svelte/internal.js": {
@@ -1740,7 +1757,7 @@
         "_snowpack/pkg/common/index-0205b586.js": {
           "bytesInOutput": 89
         },
-        "_snowpack/pkg/common/index-66c94361.js": {
+        "_snowpack/pkg/common/index-a694bb8c.js": {
           "bytesInOutput": 1822
         },
         "_snowpack/pkg/sveltestrap.js": {
@@ -1748,42 +1765,6 @@
         },
         "dist/Summary.svelte.js": {
           "bytesInOutput": 9694
-        },
-        "dist/Turn.svelte.css": {
-          "bytesInOutput": 0
-        },
-        "dist/Distribution.svelte.js": {
-          "bytesInOutput": 7009
-        },
-        "dist/RollDescription.svelte.css": {
-          "bytesInOutput": 0
-        },
-        "dist/PlayerPill.svelte.css": {
-          "bytesInOutput": 0
-        },
-        "dist/PlayerPill.svelte.js": {
-          "bytesInOutput": 736
-        },
-        "dist/Dice.svelte.css": {
-          "bytesInOutput": 0
-        },
-        "dist/Dice.svelte.js": {
-          "bytesInOutput": 1621
-        },
-        "dist/RollDescription.svelte.js": {
-          "bytesInOutput": 7856
-        },
-        "dist/RollOutcomes.svelte.js": {
-          "bytesInOutput": 1573
-        },
-        "dist/Roll.svelte.js": {
-          "bytesInOutput": 5684
-        },
-        "dist/Turn.svelte.js": {
-          "bytesInOutput": 1873
-        },
-        "dist/RollDetails.svelte.js": {
-          "bytesInOutput": 1340
         },
         "dist/About.svelte.js": {
           "bytesInOutput": 797
@@ -1950,15 +1931,6 @@
         "dist/Diced.svelte.js": {
           "bytesInOutput": 4493
         },
-        "dist/TurnSelector.svelte.css": {
-          "bytesInOutput": 0
-        },
-        "dist/TurnSelector.svelte.js": {
-          "bytesInOutput": 1109
-        },
-        "dist/TurnSelectors.svelte.js": {
-          "bytesInOutput": 1410
-        },
         "dist/Error.svelte.css": {
           "bytesInOutput": 0
         },
@@ -1969,7 +1941,7 @@
           "bytesInOutput": 0
         },
         "_snowpack/pkg/common/vega.module-d77aac5f.js": {
-          "bytesInOutput": 507538
+          "bytesInOutput": 507454
         },
         "_snowpack/pkg/vega-embed.js": {
           "bytesInOutput": 344179
@@ -2010,14 +1982,62 @@
         "dist/Theme.svelte.js": {
           "bytesInOutput": 679
         },
+        "dist/TurnSelector.svelte.css": {
+          "bytesInOutput": 0
+        },
+        "dist/TurnSelector.svelte.js": {
+          "bytesInOutput": 1113
+        },
+        "dist/TurnSelectors.svelte.js": {
+          "bytesInOutput": 1188
+        },
+        "dist/Turn.svelte.css": {
+          "bytesInOutput": 0
+        },
+        "dist/Distribution.svelte.js": {
+          "bytesInOutput": 7031
+        },
+        "dist/RollDescription.svelte.css": {
+          "bytesInOutput": 0
+        },
+        "dist/PlayerPill.svelte.css": {
+          "bytesInOutput": 0
+        },
+        "dist/PlayerPill.svelte.js": {
+          "bytesInOutput": 740
+        },
+        "dist/Dice.svelte.css": {
+          "bytesInOutput": 0
+        },
+        "dist/Dice.svelte.js": {
+          "bytesInOutput": 1625
+        },
+        "dist/RollDescription.svelte.js": {
+          "bytesInOutput": 7884
+        },
+        "dist/RollOutcomes.svelte.js": {
+          "bytesInOutput": 1577
+        },
+        "dist/Roll.svelte.js": {
+          "bytesInOutput": 5692
+        },
+        "dist/Turn.svelte.js": {
+          "bytesInOutput": 1877
+        },
+        "dist/RollDetails.svelte.js": {
+          "bytesInOutput": 1224
+        },
+        "dist/ActionPane.svelte.js": {
+          "bytesInOutput": 917
+        },
         "dist/App.svelte.js": {
-          "bytesInOutput": 8448
+          "bytesInOutput": 8342
         },
         "dist/main.js": {
           "bytesInOutput": 69
         }
       },
-      "bytes": 1422203
+      "bytes": 1422670
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
@@ -2052,12 +2072,6 @@
         "dist/Results.svelte.css": {
           "bytesInOutput": 60
         },
-        "dist/Turn.svelte.css": {
-          "bytesInOutput": 644
-        },
-        "dist/TurnSelector.svelte.css": {
-          "bytesInOutput": 1043
-        },
         "dist/viewer/AwayDugout.svelte.css": {
           "bytesInOutput": 1009
         },
@@ -2072,6 +2086,12 @@
         },
         "dist/viewer/SelectedPlayer.svelte.css": {
           "bytesInOutput": 1062
+        },
+        "dist/Turn.svelte.css": {
+          "bytesInOutput": 644
+        },
+        "dist/TurnSelector.svelte.css": {
+          "bytesInOutput": 1043
         },
         "dist/viewer/AwayBench.svelte.css": {
           "bytesInOutput": 190
@@ -2106,26 +2126,26 @@
         "dist/viewer/Foul.svelte.css": {
           "bytesInOutput": 379
         },
-        "dist/RollDescription.svelte.css": {
-          "bytesInOutput": 47
-        },
         "dist/viewer/CasSquare.svelte.css": {
           "bytesInOutput": 257
         },
         "dist/viewer/Grid.svelte.css": {
           "bytesInOutput": 219
         },
-        "dist/Dice.svelte.css": {
-          "bytesInOutput": 161
-        },
-        "dist/PlayerPill.svelte.css": {
-          "bytesInOutput": 225
+        "dist/RollDescription.svelte.css": {
+          "bytesInOutput": 47
         },
         "dist/viewer/FixedRatio.svelte.css": {
           "bytesInOutput": 130
         },
         "dist/viewer/Player.svelte.css": {
           "bytesInOutput": 986
+        },
+        "dist/Dice.svelte.css": {
+          "bytesInOutput": 161
+        },
+        "dist/PlayerPill.svelte.css": {
+          "bytesInOutput": 225
         }
       },
       "bytes": 12913
