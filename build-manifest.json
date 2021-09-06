@@ -143,7 +143,7 @@
       ]
     },
     "dist/replay/BB2toInternal.js": {
-      "bytes": 21321,
+      "bytes": 18770,
       "imports": [
         {
           "path": "dist/constants.js",
@@ -1001,7 +1001,7 @@
       ]
     },
     "dist/viewer/Viewer.svelte.js": {
-      "bytes": 67111,
+      "bytes": 67164,
       "imports": [
         {
           "path": "dist/viewer/Viewer.svelte.css",
@@ -1731,7 +1731,7 @@
           "bytesInOutput": 118
         },
         "dist/replay/BB2toInternal.js": {
-          "bytesInOutput": 11803
+          "bytesInOutput": 10274
         },
         "dist/rolls.js": {
           "bytesInOutput": 45099
@@ -1923,7 +1923,7 @@
           "bytesInOutput": 753
         },
         "dist/viewer/Viewer.svelte.js": {
-          "bytesInOutput": 26143
+          "bytesInOutput": 26158
         },
         "dist/Diced.svelte.css": {
           "bytesInOutput": 0
@@ -1941,7 +1941,7 @@
           "bytesInOutput": 0
         },
         "_snowpack/pkg/common/vega.module-d77aac5f.js": {
-          "bytesInOutput": 507454
+          "bytesInOutput": 507452
         },
         "_snowpack/pkg/vega-embed.js": {
           "bytesInOutput": 344179
@@ -2037,7 +2037,7 @@
           "bytesInOutput": 69
         }
       },
-      "bytes": 1422835
+      "bytes": 1421319
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
