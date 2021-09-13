@@ -185,7 +185,7 @@
       "imports": []
     },
     "dist/replay/BB2.js": {
-      "bytes": 284,
+      "bytes": 282,
       "imports": [
         {
           "path": "dist/constants.js",
@@ -194,7 +194,7 @@
       ]
     },
     "dist/replay/BB2toInternal.js": {
-      "bytes": 18340,
+      "bytes": 18346,
       "imports": [
         {
           "path": "dist/constants.js",
@@ -219,7 +219,7 @@
       ]
     },
     "dist/rolls.js": {
-      "bytes": 76950,
+      "bytes": 77543,
       "imports": [
         {
           "path": "dist/constants.js",
@@ -278,7 +278,7 @@
       ]
     },
     "dist/ReplayLoader.svelte.js": {
-      "bytes": 20149,
+      "bytes": 20151,
       "imports": [
         {
           "path": "dist/ReplayLoader.svelte.css",
@@ -800,7 +800,7 @@
       ]
     },
     "dist/viewer/PitchSquare.svelte.js": {
-      "bytes": 14462,
+      "bytes": 14324,
       "imports": [
         {
           "path": "dist/viewer/PitchSquare.svelte.css",
@@ -881,7 +881,7 @@
       ]
     },
     "dist/viewer/Overlay.svelte.js": {
-      "bytes": 15057,
+      "bytes": 15059,
       "imports": [
         {
           "path": "_snowpack/pkg/svelte/internal.js",
@@ -959,7 +959,7 @@
       "imports": []
     },
     "dist/viewer/SelectedPlayer.svelte.js": {
-      "bytes": 15038,
+      "bytes": 15040,
       "imports": [
         {
           "path": "dist/viewer/SelectedPlayer.svelte.css",
@@ -1021,7 +1021,7 @@
       "imports": []
     },
     "dist/viewer/Viewer.svelte.js": {
-      "bytes": 68358,
+      "bytes": 68360,
       "imports": [
         {
           "path": "dist/viewer/Viewer.svelte.css",
@@ -1699,7 +1699,7 @@
           "bytesInOutput": 0
         },
         "_snowpack/pkg/common/index-c7d6ce79.js": {
-          "bytesInOutput": 10141
+          "bytesInOutput": 10097
         },
         "_snowpack/pkg/svelte/internal.js": {
           "bytesInOutput": 0
@@ -1759,10 +1759,10 @@
           "bytesInOutput": 118
         },
         "dist/replay/BB2toInternal.js": {
-          "bytesInOutput": 10032
+          "bytesInOutput": 10038
         },
         "dist/rolls.js": {
-          "bytesInOutput": 45087
+          "bytesInOutput": 45500
         },
         "dist/replay.js": {
           "bytesInOutput": 1552
@@ -1906,7 +1906,7 @@
           "bytesInOutput": 284
         },
         "dist/viewer/PitchSquare.svelte.js": {
-          "bytesInOutput": 4206
+          "bytesInOutput": 4100
         },
         "dist/viewer/OverlayMove.svelte.js": {
           "bytesInOutput": 4073
@@ -2056,7 +2056,7 @@
           "bytesInOutput": 69
         }
       },
-      "bytes": 1440705
+      "bytes": 1440974
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
