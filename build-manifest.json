@@ -453,7 +453,7 @@
       "imports": []
     },
     "dist/viewer/Player.svelte.js": {
-      "bytes": 6707,
+      "bytes": 6838,
       "imports": [
         {
           "path": "dist/viewer/Player.svelte.css",
@@ -959,7 +959,7 @@
       "imports": []
     },
     "dist/viewer/SelectedPlayer.svelte.js": {
-      "bytes": 15040,
+      "bytes": 15061,
       "imports": [
         {
           "path": "dist/viewer/SelectedPlayer.svelte.css",
@@ -1825,7 +1825,7 @@
           "bytesInOutput": 0
         },
         "dist/viewer/Player.svelte.js": {
-          "bytesInOutput": 2018
+          "bytesInOutput": 2081
         },
         "dist/viewer/CasSquare.svelte.js": {
           "bytesInOutput": 2304
@@ -1930,7 +1930,7 @@
           "bytesInOutput": 0
         },
         "dist/viewer/SelectedPlayer.svelte.js": {
-          "bytesInOutput": 5446
+          "bytesInOutput": 5457
         },
         "dist/viewer/Banner.svelte.css": {
           "bytesInOutput": 0
@@ -1960,7 +1960,7 @@
           "bytesInOutput": 0
         },
         "_snowpack/pkg/common/vega.module-d77aac5f.js": {
-          "bytesInOutput": 507592
+          "bytesInOutput": 507594
         },
         "_snowpack/pkg/vega-embed.js": {
           "bytesInOutput": 344179
@@ -2056,7 +2056,7 @@
           "bytesInOutput": 69
         }
       },
-      "bytes": 1440974
+      "bytes": 1441050
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
