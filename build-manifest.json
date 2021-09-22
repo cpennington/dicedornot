@@ -524,7 +524,7 @@
       ]
     },
     "dist/viewer/Bench.svelte.js": {
-      "bytes": 4998,
+      "bytes": 5044,
       "imports": [
         {
           "path": "dist/viewer/Bench.svelte.css",
@@ -1825,7 +1825,7 @@
           "bytesInOutput": 1807
         },
         "dist/viewer/Bench.svelte.js": {
-          "bytesInOutput": 1717
+          "bytesInOutput": 1750
         },
         "dist/viewer/TeamAids.svelte.css": {
           "bytesInOutput": 0
@@ -2041,7 +2041,7 @@
           "bytesInOutput": 69
         }
       },
-      "bytes": 1445366
+      "bytes": 1445399
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
