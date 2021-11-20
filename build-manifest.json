@@ -147,7 +147,7 @@
       ]
     },
     "dist/constants.js": {
-      "bytes": 80788,
+      "bytes": 80933,
       "imports": []
     },
     "dist/distribution.js": {
@@ -172,7 +172,7 @@
       ]
     },
     "dist/replay/BB2toInternal.js": {
-      "bytes": 21276,
+      "bytes": 21260,
       "imports": [
         {
           "path": "dist/constants.js",
@@ -1012,7 +1012,7 @@
       ]
     },
     "dist/viewer/Viewer.svelte.js": {
-      "bytes": 73876,
+      "bytes": 72397,
       "imports": [
         {
           "path": "dist/viewer/Viewer.svelte.css",
@@ -1736,7 +1736,7 @@
           "bytesInOutput": 532
         },
         "dist/constants.js": {
-          "bytesInOutput": 52369
+          "bytesInOutput": 52442
         },
         "dist/distribution.js": {
           "bytesInOutput": 4453
@@ -1751,7 +1751,7 @@
           "bytesInOutput": 86711
         },
         "dist/replay/BB2toInternal.js": {
-          "bytesInOutput": 11678
+          "bytesInOutput": 11689
         },
         "dist/rolls.js": {
           "bytesInOutput": 46199
@@ -1910,7 +1910,7 @@
           "bytesInOutput": 274
         },
         "dist/viewer/Overlay.svelte.js": {
-          "bytesInOutput": 5013
+          "bytesInOutput": 5015
         },
         "_snowpack/pkg/underscore.js": {
           "bytesInOutput": 19579
@@ -1934,7 +1934,7 @@
           "bytesInOutput": 759
         },
         "dist/viewer/Viewer.svelte.js": {
-          "bytesInOutput": 29597
+          "bytesInOutput": 28848
         },
         "dist/Diced.svelte.css": {
           "bytesInOutput": 0
@@ -2048,7 +2048,7 @@
           "bytesInOutput": 69
         }
       },
-      "bytes": 1451132
+      "bytes": 1450469
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
