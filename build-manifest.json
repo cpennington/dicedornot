@@ -16,7 +16,7 @@
       "bytes": 168,
       "imports": []
     },
-    "_snowpack/pkg/common/index-3b2563e7.js": {
+    "_snowpack/pkg/common/index-c78811d6.js": {
       "bytes": 31553,
       "imports": []
     },
@@ -24,7 +24,7 @@
       "bytes": 947,
       "imports": [
         {
-          "path": "_snowpack/pkg/common/index-3b2563e7.js",
+          "path": "_snowpack/pkg/common/index-c78811d6.js",
           "kind": "import-statement"
         }
       ]
@@ -37,7 +37,7 @@
       "bytes": 70,
       "imports": [
         {
-          "path": "_snowpack/pkg/common/index-3b2563e7.js",
+          "path": "_snowpack/pkg/common/index-c78811d6.js",
           "kind": "import-statement"
         }
       ]
@@ -81,7 +81,7 @@
       "bytes": 3274,
       "imports": [
         {
-          "path": "_snowpack/pkg/common/index-3b2563e7.js",
+          "path": "_snowpack/pkg/common/index-c78811d6.js",
           "kind": "import-statement"
         }
       ]
@@ -99,7 +99,7 @@
         }
       ]
     },
-    "_snowpack/pkg/common/index-6091044b.js": {
+    "_snowpack/pkg/common/index-70711ebd.js": {
       "bytes": 4806,
       "imports": [
         {
@@ -107,7 +107,7 @@
           "kind": "import-statement"
         },
         {
-          "path": "_snowpack/pkg/common/index-3b2563e7.js",
+          "path": "_snowpack/pkg/common/index-c78811d6.js",
           "kind": "import-statement"
         }
       ]
@@ -116,7 +116,7 @@
       "bytes": 149,
       "imports": [
         {
-          "path": "_snowpack/pkg/common/index-6091044b.js",
+          "path": "_snowpack/pkg/common/index-70711ebd.js",
           "kind": "import-statement"
         },
         {
@@ -124,7 +124,7 @@
           "kind": "import-statement"
         },
         {
-          "path": "_snowpack/pkg/common/index-3b2563e7.js",
+          "path": "_snowpack/pkg/common/index-c78811d6.js",
           "kind": "import-statement"
         }
       ]
@@ -201,7 +201,7 @@
       ]
     },
     "dist/rolls.js": {
-      "bytes": 79763,
+      "bytes": 79924,
       "imports": [
         {
           "path": "dist/constants.js",
@@ -329,11 +329,11 @@
       "bytes": 66207,
       "imports": [
         {
-          "path": "_snowpack/pkg/common/index-3b2563e7.js",
+          "path": "_snowpack/pkg/common/index-c78811d6.js",
           "kind": "import-statement"
         },
         {
-          "path": "_snowpack/pkg/common/index-6091044b.js",
+          "path": "_snowpack/pkg/common/index-70711ebd.js",
           "kind": "import-statement"
         },
         {
@@ -1543,8 +1543,25 @@
         }
       ]
     },
+    "dist/FullGameLog.svelte.css": {
+      "bytes": 50,
+      "imports": []
+    },
+    "dist/FullGameLog.svelte.js": {
+      "bytes": 5104,
+      "imports": [
+        {
+          "path": "dist/FullGameLog.svelte.css",
+          "kind": "import-statement"
+        },
+        {
+          "path": "_snowpack/pkg/svelte/internal.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
     "dist/ActionPane.svelte.js": {
-      "bytes": 2924,
+      "bytes": 3537,
       "imports": [
         {
           "path": "_snowpack/pkg/svelte/internal.js",
@@ -1556,6 +1573,10 @@
         },
         {
           "path": "dist/RollDetails.svelte.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/FullGameLog.svelte.js",
           "kind": "import-statement"
         },
         {
@@ -1693,7 +1714,7 @@
         "dist/App.svelte.css": {
           "bytesInOutput": 0
         },
-        "_snowpack/pkg/common/index-3b2563e7.js": {
+        "_snowpack/pkg/common/index-c78811d6.js": {
           "bytesInOutput": 10047
         },
         "_snowpack/pkg/svelte/internal.js": {
@@ -1726,7 +1747,7 @@
         "_snowpack/pkg/svelte/easing.js": {
           "bytesInOutput": 0
         },
-        "_snowpack/pkg/common/index-6091044b.js": {
+        "_snowpack/pkg/common/index-70711ebd.js": {
           "bytesInOutput": 1822
         },
         "_snowpack/pkg/svelte/transition.js": {
@@ -1754,7 +1775,7 @@
           "bytesInOutput": 11689
         },
         "dist/rolls.js": {
-          "bytesInOutput": 46199
+          "bytesInOutput": 46322
         },
         "dist/replay-utils.js": {
           "bytesInOutput": 2988
@@ -1895,16 +1916,16 @@
           "bytesInOutput": 284
         },
         "dist/viewer/PitchSquare.svelte.js": {
-          "bytesInOutput": 4577
+          "bytesInOutput": 4579
         },
         "dist/viewer/OverlayMove.svelte.js": {
-          "bytesInOutput": 4072
+          "bytesInOutput": 4076
         },
         "dist/viewer/OverlayBlock.svelte.js": {
-          "bytesInOutput": 5012
+          "bytesInOutput": 5016
         },
         "_snowpack/pkg/chroma-js.js": {
-          "bytesInOutput": 42086
+          "bytesInOutput": 42088
         },
         "dist/theme.js": {
           "bytesInOutput": 274
@@ -2038,8 +2059,14 @@
         "dist/RollDetails.svelte.js": {
           "bytesInOutput": 1207
         },
+        "dist/FullGameLog.svelte.css": {
+          "bytesInOutput": 0
+        },
+        "dist/FullGameLog.svelte.js": {
+          "bytesInOutput": 1775
+        },
         "dist/ActionPane.svelte.js": {
-          "bytesInOutput": 838
+          "bytesInOutput": 1017
         },
         "dist/App.svelte.js": {
           "bytesInOutput": 8402
@@ -2048,7 +2075,7 @@
           "bytesInOutput": 69
         }
       },
-      "bytes": 1450776
+      "bytes": 1452865
     },
     "../~~bundle~~/dist/main.css": {
       "imports": [],
@@ -2076,6 +2103,9 @@
         },
         "dist/Explanation.svelte.css": {
           "bytesInOutput": 78
+        },
+        "dist/FullGameLog.svelte.css": {
+          "bytesInOutput": 50
         },
         "dist/Loading.svelte.css": {
           "bytesInOutput": 51
@@ -2156,7 +2186,7 @@
           "bytesInOutput": 224
         }
       },
-      "bytes": 12963
+      "bytes": 13013
     }
   }
 }
